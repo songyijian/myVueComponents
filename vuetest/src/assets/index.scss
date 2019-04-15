@@ -1,0 +1,65 @@
+$color1: #2c3e50;
+$color2: #42b983;
+
+
+*{margin: 0;padding: 0;list-style: none; box-sizing: border-box;}
+h1, h2, h3, h4, h5, h6 { font-size: 100%; }
+address, cite, dfn, em, var { font-style: normal; } /* 将斜体扶正 */
+code, kbd, pre, samp { font-family: courier new, courier, monospace; } /* 统一等宽字体 */
+a{text-decoration:none;}
+a:hover{text-decoration:none;}
+legend { color: #000; } /* for ie6 */
+fieldset, img { border: 0; } /* img 搭车：让链接里的 img 无边框 */
+button, input, select, textarea { font-size: 100%; } /* 使得表单元素在 ie 下能继承字体大小 */
+select,input,textarea,area{ border-radius:0; border:none; outline:none; box-sizing:border-box; appearance:none;-moz-appearance:none;-webkit-appearance:none;-ms-appearance:none;}
+table { border-collapse: collapse; border-spacing: 0; }
+img{border:none; vertical-align:top; }
+body, html{ /*height:100%; width:100%;*/ -webkit-tap-highlight-color:rgba(0,0,0,0);-webkit-font-smoothing: antialiased;-moz-osx-font-smoothing: grayscale;}
+
+
+
+
+#app {
+  font-family: 'Avenir', Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  color: $color1;
+}
+
+
+
+
+#nav {
+  border-bottom: 1px solid rgba(0,0,0,0.1);
+  padding: 20px;
+
+  position: fixed;
+  width: 100%;
+  top: 0;
+
+  background-color: #fff;
+    height: 40px;
+    padding: 10px 60px;
+    position: relative;
+    z-index: 100;
+
+  a {
+    display: inline-block;
+    margin: 0 2rem;
+    font-weight: bold;
+    color: $color1;
+    &.router-link-exact-active {
+      color: $color2;
+    }
+  }
+}
+
+
+#main{
+position: relative;
+position: static;
+z-index: 1;
+padding: 0 60px;
+// padding: 0 60px 30px;
+overflow-x: hidden;
+}
