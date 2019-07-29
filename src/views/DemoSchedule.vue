@@ -38,8 +38,6 @@ export default {
     }
   },
   mounted(){
-    
-    // this.$http.get('/mock/Schedule',{params:{a:1}}).then(res=>{
     this.$get('/mock/Schedule',{a:1}).then(res=>{
       console.log(res);
       if(res.code===200){

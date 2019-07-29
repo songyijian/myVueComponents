@@ -10,7 +10,7 @@ yarn run lint
 yarn run test:e2e
 ```
 
-## 路径配置 vue.config.js
+#### 路径配置 vue.config.js
 ```
 // vue.config.js
 chainWebpack(config) {
@@ -26,18 +26,15 @@ chainWebpack(config) {
 }
 ```
 
-
-## mock数据
+#### mock数据
 实现： 本地mock.js拦截ajax请求  
-mock.js 文档地址(https://github.com/nuysoft/Mock/wiki)
+mock.js (https://github.com/nuysoft/Mock/wiki)
 ```
-public
-  > mock
-    > index.js //入口文件,模块引入import "./home.js"
+mock
+  > index.js //入口文件,模块引入import "./home.js"
 ```
 
-
-## 模版
+#### 模版
 支持</>,pug写法
 ```
 // vue.config.js
@@ -49,5 +46,4 @@ chainWebpack(config) {
     .loader('pug-html-loader')
     .end()
 }
-
 ```
