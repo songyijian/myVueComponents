@@ -8,7 +8,7 @@
 </template>
 
 <script>
-import routes from '~router/router.config.js'
+import routes from '~config/router.config.js'
 export default {
   name: 'App',
   data(){

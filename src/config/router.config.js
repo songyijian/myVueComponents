@@ -6,9 +6,9 @@ module.exports = routes = [
     component: () => import('~views/Home.vue')
   },
   {
-    path: '/DemoGetFileBase64',
-    name: 'GetFileBase64',
-    component: () => import('~views/DemoGetFileBase64.vue')
+    path: '/DemoSUpload',
+    name: 'SUpload',
+    component: () => import('~views/DemoSUpload.vue')
   },
   {
     path: '/DemoSchedule', //小时周期控件

@@ -3,8 +3,12 @@ import App from './App.vue'
 import router from '~router/index.js'
 import store from './store'
 import axios from '~config/http.config.js'
+// mock 数据
+import '~mock/index.js'
+// 样式
 import '~style/reset.scss'
 import '~style/layout.scss'
+
 
 Vue.config.productionTip = false
 
@@ -26,9 +30,7 @@ Vue.prototype.$get = function get(url, param) {
   })
 }
 
-// mock 数据
 
-import '~mock/index.js'
 
 
 new Vue({

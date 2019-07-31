@@ -41,29 +41,33 @@
   </GetFileBase64>
 ```
 
-### Schedule
-> 周期小时粒度快选组建
+
+## Schedule - 小时周期控件
 ```
-周期小时粒度快选组建
-1.支持框选  2.点选  3.列选 +反选  4.周1～7行选 + 反选
-
-<Schedule @onchange="fn" :tdSize="30" :setType="true" :originVal="[]" />
-  :originVal="[]"   #必须是只包含1|0的168位数组 (1选，2未选)*
-  @onchange="fn"    #修改监听函数fn(val)
-  :tdSize="30"      #每个格子的大小(px)，最小16
-  :setType="true"   #是否可编辑
-  :timeHeight="30"  #0-23小时列快速选择按钮高度(px)
-  :dayWidth="50"    #周1-7行速选择按钮宽度(px)，高度是根据tdSize算出来的
-
 历史版本
-
-* v 20190718 / 硬核bug修复，tdsize设置最小值，originVal校验规则修改（错了自行检查不做提示）
-* v 20180727
+  v 20190729
+    setType改为disabled
+    逻辑回滚到v20180727（后悔药>健康）
+    算法函数修改
+  v 20190718
+    硬核bug修复，tdsize设置最小值，originVal校验规则修改（错了自行检查不做提示）
+  v 20180727
+功能
+  1.支持单位框选、点选
+  2.行列快选、反选
+  3.快捷选择面板
+api
+  <Schedule @onchange="fn" :tdSize="30" :disabled="true" :originVal="[]" />
+    :originVal="[]"     #必须是只包含1|0的168位数组 (1选，2未选)*
+    @onchange="fn"      #修改监听函数fn(val)
+    :disabled="true"    #是否可编辑
+    :tdSize="30"        #每个格子的大小(px) 不<16
+    :timeHeight="30"    #0-23小时列快速选择按钮高度(px) 不<16
+    :dayWidth="50"      #周1-7行速选择按钮宽度(px) 不<16 [高度是根据tdSize算出来的]
 ```
 
 
-
-#### SpuerChart
+#### SpuerChart - 数据可视化图形
 >chart.js 的简单封装,参数参考chartjs
 ```
 type , 图标类型 | line
@@ -83,7 +87,48 @@ options , 事件交互
   options:{type: Array,required: true},
   datasets:{ type: Object, required: true },
   labels:{type: Array,required: true}
-
-
-  
 ```
+
+
+### SUpload - 更灵活的文件上传控件
+```
+
+api
+
+* 钩子函数
+
+  //获取文件，拖拽已把不符合剔除
+  @change(fileList)
+
+  //验证阶段（符合accept的文件list），可以进一步校验剔除你不想要的
+  //这是个用属性传入的func
+  :validatorCallback(fileList,callbackFn)   
+
+  // 上传执行函数，可以被动调用执行上传动作
+  @submit
+
+
+
+* 条件配置
+
+  // 是否多次提交
+  oneByOne = "true"    //true=一个接一个 | false=一起性上传
+  //Together
+
+  // 是否主动上传
+  autoUpload = "true"  
+
+  //上传地址,为空时不会执行任何上传动作
+  action = '*/*'
+
+  // 是否选择多文件,false = drag下选择符合（accept属性的）的第一个
+  multiple = "true"
+
+  // 不可编辑
+  disabled = "false"  
+  //
+  drag
+
+```
+
+
