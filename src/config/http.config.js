@@ -11,7 +11,7 @@ axios.defaults.retryDelay = 1000
 // 上行拦截
 axios.interceptors.request.use(config => {
   console.log('上行拦截',config)
-  if (config.method === 'post') {
+  if (config.method === 'post' && config.headers['Content-Type'] !== "multipart/form-data") {
     config.data = qs.stringify(config.data)
   }
   return config
@@ -24,7 +24,7 @@ axios.interceptors.request.use(config => {
 // 下行拦截
 axios.interceptors.response.use(
   res => {
-    console.log(res);
+    // console.log(res);
     return res.data
   },
   error => { //这里是返回最外层状态码不为200的错误

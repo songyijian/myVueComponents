@@ -98,7 +98,9 @@ api
 * 钩子函数
 
   //获取文件，拖拽已把不符合剔除
-  @change(fileList)
+  :getFile(fileList)
+
+
 
   //验证阶段（符合accept的文件list），可以进一步校验剔除你不想要的
   //这是个用属性传入的func

@@ -3,14 +3,15 @@
     <h1>SUpload - 文件上传</h1>
     <div>
       <SUpload 
-        :accept="accept"
         action="http://10.130.151.60:80/upload/"
-        @validatorCallback="validatorfn"
-        :data="{a:1}"
+        :getFile="getFilefn"
+        :oneByOne="false"
       >
 
+        :data="{a:1}"
+        @validatorCallback="validatorfn"
+        :accept="accept"
         :drag="false"
-        action="https://jsonplaceholder.typicode.com/posts/"
         :disabled="true"
         <p>将文件拖拽到此区域;</p>
         <p>image/gif,image.jpeg,image/png,video/mp4</p>
@@ -22,6 +23,7 @@
 
 <script>
 import SUpload from '~contol/SUpload'
+import { Promise } from 'q';
 
 export default {
   components: {SUpload},
@@ -33,6 +35,14 @@ export default {
   },
   mounted(){},
   methods:{
+    getFilefn(fl){
+      return new Promise(function(resolve, reject){
+        setTimeout(()=>{
+          // console.log('tt')
+          resolve()
+        },2000)
+      })
+    },
     validatorfn(fl,callback){
       alert(1)
       // setTimeout(()=>{
