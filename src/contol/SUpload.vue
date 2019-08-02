@@ -2,7 +2,7 @@
  * @Description: 上传控件
  * @Author: yijian.song
  * @Date: 2019-07-29 19:37:08
- * @LastEditTime: 2019-08-01 20:13:12
+ * @LastEditTime: 2019-08-02 19:57:05
  * @LastEditors: Please set LastEditors
 
 accept 属性接受一个逗号分隔的 MIME 类型字符串, 如:
@@ -14,28 +14,6 @@ accept 属性接受一个逗号分隔的 MIME 类型字符串, 如:
 
 <template lang="html">
   <div>
-    <!-- <div class="el_upload_box" :style="{'width':`${sizeW}px`, 'min-height':`${sizeH}px`}">
-      <div tabindex="0" class="el_upload"
-            :class="{'upload_err_border':validate==='err','upload_suc_border':validate==='suc','upload_disabled':disabled}"
-            :style="{'width':`${sizeW}px`, 'height':`${sizeH}px`}"
-            @click="onClick" >
-        <input type="file"
-          style="display:none"
-          :disabled="disabled"
-          :multiple="multiple"
-          @change="avatarUploader($event)"
-          :accept="accept" ref="file"  >
-        </input>
-        <div class="uploader_icon_box">
-          <span class="iconfont" title="上传">&#xe604;</span>
-        </div>
-        <div class="upload_slot">
-          <slot></slot>
-        </div>
-      </div>
-      <p class="upload_err" v-if="validate==='err'">{{errTip}}</p>
-    </div>
-    -->
     <div id="drop_area" @click="onClick" :class="{'disabled':disabled, 'drage':drageStyle}"
      @drop.prevent="drop($event)"
      @dragleave.prevent="dragleave($event)"
@@ -57,26 +35,13 @@ accept 属性接受一个逗号分隔的 MIME 类型字符串, 如:
 
 <script lang="js">
   function isPromise(o) {
-      return Object.prototype.toString.call(o).slice(8, -1) === 'Promise'
+    return Object.prototype.toString.call(o).slice(8, -1) === 'Promise'
   }
-
 
   export default {
     name: 'SUpload',
     components: {},
     props: {
-      // sizeH : {//验证描述，错误描述
-      //   type: Number,
-      //   default:178
-      // },
-      // sizeW : {//验证描述，错误描述
-      //   type: Number,
-      //   default:178
-      // },
-      // errTip : {      //验证描述，错误描述
-      //   type: String,
-      //   default:'未通过验证'
-      // },
       disabled : {    //不可编辑
         type: Boolean,
         default: false
@@ -97,40 +62,45 @@ accept 属性接受一个逗号分隔的 MIME 类型字符串, 如:
         type: Boolean,
         default:false
       },
-      action:{      //上传地址
+      action:{        //上传地址
         type: String,
         validator(str){
           return typeof str==='string' && str.indexOf('/') >= 0
         }
       },
-      autoUpload:{  //主动上传
+      autoUpload:{    //主动上传
         type: Boolean,
         default:true
       },
-      oneByOne:{  // 是否多次提交
+      oneByOne:{      //是否多次提交
         type: Boolean,
         default:true
       },
-      data:{      //上传时附带的额外参数object
-        type: Object
-      },
-      validatorCallback:{
-        type: Function
+      data:{          //上传时附带的额外参数object
+        type: Object,
+        default:null
       },
       getFile:{
         type: Function
       },
+      beforeUpload:{    //发送前钩子
+        type: Function
+      }
     },
     data() {
       return {
         drageStyle:false,  //拖入样式
         fileList:[],
-        reqFileList:null,
+        // filesStaus:[        //文件的上传状态
+        //   // {
+        //   //   file:,        //文件对象
+        //   //   status:,      //0=未开始，1=上传中，2=上传完成 -1=上传失败 -2=本次上传被跳过
+        //   //   Progress:0,   //进度0～100
+        //   // }
+        // ] 
       }
     },
-    mounted(){
-
-    },
+    mounted(){ },
     methods: {
       // 点击逻辑
       onClick(){
@@ -172,7 +142,6 @@ accept 属性接受一个逗号分隔的 MIME 类型字符串, 如:
 
       // 钩子函数区
       async getFileFn(fl = this.fileList){
-
         console.log(1)
         /**
         * @Description: getFile属性支持返回值
@@ -181,157 +150,177 @@ accept 属性接受一个逗号分隔的 MIME 类型字符串, 如:
         *            resolve([])继续 ,【fileList】可返回重置文件列表（剔除、添加）
         *            reject 终止后续动作
         */
-        if(typeof this.getFile === 'function'){
-          console.log(2)
-          try {
-            await this.getFile(fl).then(data=>{
-              console.log(3,'重置，文件列表')
-              if(Array.isArray(data)){
-              }
-              if(this.autoUpload && this.action){
-                this.submit()
-              }
-            }).catch(data=>{
-              console.log('Promise','终止...')
-            })
-          } catch (error) {
-            throw `getFile返回值非Promise！ ${error}`
-          }
-
+        if(typeof this.getFile !== 'function'){
+          console.log(2);
+          this.submit(); 
+          return
         }
-        console.log(5)
-
+      
+        try {
+          await this.getFile(fl).then(data=>{
+            console.log(2,'可以重置，文件列表')
+            typeof data !=='undefined' && Array.isArray(data) && (this.fileList = data)
+            if(this.autoUpload && this.action){
+              this.submit()
+            }
+          }).catch(data=>{
+            console.log('Promise','终止...')
+          })
+        } catch (error) {
+          throw `getFile 返回值必须是 Promise！\n ${error}`
+        }
       },
-
-      // validatorFileFn(fl = this.fileList){
-      //   // 利用callback获取，验证后的数据
-      //   return new Promise((resolve,reject) => {
-      //     this.validatorCallback(fl,(callbackFliteListData)=>{
-      //       try {
-      //         this.reqFileList = callbackFliteListData
-      //         resolve()
-      //       } catch (error) {
-      //         reject()
-      //       }
-      //     })
-      //   })
-      // },
 
       // 触发上传
-      submit(){
+      // submit(){
+      //   console.log(3);
+      //   this.uploadEvent()
+      // },
+
+      async submit(){
         console.log(4);
-        console.log('上传...',this.data)
-        this.uploadEvent()
+        // 参数整理
+        const setFormData = (filesObj)=>{
+          try {
+            let sfile = Array.isArray(filesObj) ? filesObj :[filesObj]
+            let formdata = new FormData()
+            sfile.forEach(element => {
+              formdata.append(element.name || 'file',element) //应该分拆成过个文件一起上传
+            })
+            if(this.data){
+              for (const key in this.data) {
+                if (this.data.hasOwnProperty(key)) {
+                  const element = this.data[key]
+                  formdata.append(key,element)  //分拆成多个key：vale
+                }
+              }
+            }
+            return formdata
+          } catch (error) {
+            throw '参数组成formData时产生错误！'
+          }
+        }
 
-     
+        var fs = this.fileList
+        if(this.oneByOne){
+          let ls = fs.length
+          let i = 0
+          console.log(4.1,typeof this.beforeUpload)
+          for(i; i<ls; i++){
+            if(typeof this.beforeUpload !== "function"){ 
+              // 发送逻辑
+              this.http(setFormData(fs[i]))
+              return 
+            }
+            let lock = null //循环锁
+            try {
+              await this.beforeUpload(fs[i]).then(data=>{
+                lock = true
+              }).catch(data=>{
+                lock = data === "break" ? data :false
+              })
+              if(lock===false){ continue;return } //跳出本次循环
+              if(lock==='break'){ break;return } //循环直接跳出
+            } catch (error) {
+              throw `beforeUpload 返回值必须是 Promise！\n ${error}`
+              continue;
+            }
 
-        // if(axios)
+            this.http(setFormData(fs[i]))
+          }
+
+        }else{
+          if(typeof this.beforeUpload !== "function"){ 
+            // 发送逻辑
+            this.http(setFormData(fs))
+            return 
+          }
+          try {
+            await this.beforeUpload(fs).then(data=>{
+              this.http(setFormData(fs))
+            })
+            .catch(data=>{
+              if(data==='break'){}
+            })
+          } catch (error) {
+            throw `beforeUpload 返回值必须是 Promise！\n ${error}`
+          }
+        }
+
       },
 
-      http(url,data,fn){
+      // 上传方法
+      http(data){
+        console.log('http:' + 5);
         if(axios){
-          axios.post(this.action,function(req,res){
+          let self = this
+          let config = {
+              onUploadProgress: ev => {
+                let complete = (ev.loaded / ev.total * 100 | 0)
+                this.uploadProgress(complete,data,ev.loaded, ev.total)
+              },
+              headers: {
+                'Content-Type': 'multipart/form-data'
+              }
+          }
+          axios.post(this.action,data,config).then(res=>{
+            if (res.status == 200) {
+              this.uploadSuccess(data,res)
+            } else {
+              this.uploadError(data,res)
+            }
+          })
+
+        }else{
+          new Promise(function(resolve, reject){
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", this.action, true);
+            xhr.onload = (evt) =>{
+              if (xhr.status == 200) {
+                this.uploadSuccess(data,evt.target.responseText)
+              } else {
+                this.uploadError(data,evt.target.responseText)
+              }
+            }
+            // 获取上传进度
+            xhr.upload.onprogress = (event)=>{
+              if (event.lengthComputable) {
+                let complete = Math.floor(event.loaded / event.total * 100)
+                this.uploadProgress(complete,data,event.loaded, event.total)
+              }
+            }
+            xhr.send(data);
           })
         }
-        
+
       },
-
-      // 文件上传前
-      beforeUpload(){
+      /**
+       * @Description: 上传进度回调
+       * @param {Number}  step    0~100
+       * @param {obj}     file    当前文件
+       * @param {type}    loaded  上传了多少
+       * @param {type}    total   总量 
+       */
+      uploadProgress(step,file,loaded,total){
+        console.log(step)
       },
-
-      uploadEvent(){
-        let config = {
-          headers:{
-            'Content-Type':'multipart/form-data',
-            "Access-Control-Allow-Origin":"*"
-          }
-        }
-        if(this.oneByOne){
-          
-        }else{
-          let formdata = new FormData()
-          formdata.append('file',this.fileList)
-          if(this.data){
-            formdata.append('data',this.data)
-          }
-
-          // var xhr = new XMLHttpRequest();//第一步  
-
-          // //post方式  
-          // xhr.open('POST', this.action); //第二步骤  
-          // //发送请求  
-          // xhr.send(formData);  //第三步骤  
-          // //ajax返回  
-          // xhr.onreadystatechange = function(){ //第四步  
-          // if ( xhr.readyState == 4 && xhr.status == 200 ) {  
-          //   console.log( xhr.responseText );        
-          // }  
-          // //设置超时时间  
-          // xhr.timeout = 10000;  
-          // xhr.ontimeout = function(event){  
-          //   alert('请求超时！')
-          // }
-          
-            axios.post(this.action,formdata,config).then(res=>{
-              console.log(res)
-            })
-        }
-
-
-          // if(this.data){
-          //   for (const key in this.data) {
-          //     if (this.data.hasOwnProperty(key)) {
-          //       const element = this.data[key];
-          //       formdata.append(key,element)
-          //     }
-          //   }
-          // }
-          // console.log(formdata,this.fileList)
-
+      /**
+       * @Description: uploadSuccess 、uploadError
+       * @param {file}  file 当前文件
+       * @param {res}  res 当前文件
+       */
+      uploadSuccess(file,res){
+        alert('2222')
+        console.log(file,res)
+      },
+      uploadError(file,res){
+        alert('000')
+        console.log(file,res)
       }
-      
 
-      // avatarUploader(event){ // 图片上传
-      //   let files = event.target.files;
-      //   if(!files[0]){ return }
-      //   let mType = files[0].type;
-      //   if(files.length > 0){
-      //     this.fileData.files = files[0];
-      //     // 获取 base64
-      //     let reader = new FileReader();
-      //     reader.readAsDataURL(files[0]);
-      //     reader.onload = (e)=> {
-      //       let base64 = e.target.result;
-      //       this.fileData.base64 = base64;
-      //       // 图片信息
-      //       if(mType.indexOf("image")>=0){
-      //         let media = new Image();
-      //         media.src = base64;
-      //         media.onload=()=>{
-      //           this.fileData.imgData = {
-      //             base64:base64,
-      //             width:media.width,
-      //             height:media.height,
-      //             name: this.fileData.files.name,
-      //             size: this.fileData.files.size,
-      //             type: this.fileData.files.type
-      //           } 
-      //           media=null;
-      //           this.$emit('onchange',this.fileData)
-      //         }
-      //         media.onerror=()=>{image=null}
-      //       }else{
-      //         this.$emit('onchange',this.fileData) // 显然不是图片文件
-      //       }
-      //     }
-          
-      //   }
-      // }
     },
     computed: {},
-    watch:{
-    }
+    watch:{ }
 
   }
 </script>
@@ -340,7 +329,6 @@ accept 属性接受一个逗号分隔的 MIME 类型字符串, 如:
 <style scoped lang="scss">
   $pcolor : #409EFF;
   $color_main: #409EFF;
-
   
   #drop_area{
     box-sizing: border-box;
@@ -370,43 +358,4 @@ accept 属性接受一个逗号分隔的 MIME 类型字符串, 如:
     background-color: #409eff2e;
 
   }
-
-
-
-
-/* 上传 */
-.el_upload_box{ //width:178px; min-height: 178px;
-  display: inline-block;
-  .el_upload {
-    border: 1px dashed #d8dce5;
-    border-radius: 6px;
-    cursor: pointer;
-    position: relative;
-    overflow: hidden;
-    // background: #fff;
-    outline:none;
-
-    &:hover{ border: 1px dashed $color_main;}
-    &:hover .uploader_icon_box{ z-index: 2; background:rgba(255,255,255,0.5); color: #000;
-      span{ margin: 0.5rem;}
-    }
-    input{ display: none; outline:none; height:1px; width:1px;}
-    img{ width: 100%;}
-    .uploader_icon_box{ position:absolute; top: 0; left: 0; width: 100% !important; height: 100%;
-      display:flex; flex-flow: wrap nowrap; justify-content: center; align-items:center;
-    }
-    .upload_slot{position:absolute; top: 0; left: 0; width: 100% !important; height: 100%;}
-  }
-  // 禁用
-  .el_upload.upload_disabled {
-      pointer-events:none;
-      background-color: #f5f7fa;
-      border-color: #e4e7ed;
-      color: #c0c4cc;
-      cursor: not-allowed;
-  }
-  .upload_err_border{ border: 1px solid red; }
-  .upload_suc_border{border: 1px solid #67c23a; }
-  .upload_err{ color: #fa5555; font-size: 12px; line-height: 1; padding-top: 4px; text-align: left;}
-}
 </style>

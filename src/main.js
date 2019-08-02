@@ -4,7 +4,7 @@ import router from '~router/index.js'
 import store from './store'
 import axios from '~config/http.config.js'
 // mock 数据
-import '~mock/index.js'
+// import '~mock/index.js'
 // 样式
 import '~style/reset.scss'
 import '~style/layout.scss'

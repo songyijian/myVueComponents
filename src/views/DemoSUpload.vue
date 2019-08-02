@@ -5,10 +5,13 @@
       <SUpload 
         action="http://10.130.151.60:80/upload/"
         :getFile="getFilefn"
+        :beforeUpload="beforeUploadfn"
+
+        :data="{a:1,b:2}"
+        
         :oneByOne="false"
       >
 
-        :data="{a:1}"
         @validatorCallback="validatorfn"
         :accept="accept"
         :drag="false"
@@ -38,20 +41,17 @@ export default {
     getFilefn(fl){
       return new Promise(function(resolve, reject){
         setTimeout(()=>{
-          // console.log('tt')
           resolve()
-        },2000)
+        },1000)
       })
     },
-    validatorfn(fl,callback){
-      alert(1)
-      // setTimeout(()=>{
-      //   callback(
-      //     fl.map(item=>{
-      //       return item
-      //     })
-      //   )
-      // },2000)
+    beforeUploadfn(i){
+      return new Promise(function(resolve, reject){
+        console.log('ppppppppppp')
+        setTimeout(()=>{
+          resolve()
+        },1000)
+      })
     }
   }
 }
