@@ -2,16 +2,17 @@
   <div>
     <h1>SUpload - 文件上传</h1>
     <div>
-      <SUpload 
-        action="http://10.130.151.60:80/upload/"
+      <SUpload
+        action="http://localhost:80/upload/"
         :getFile="getFilefn"
         :beforeUpload="beforeUploadfn"
-
         :data="{a:1,b:2}"
-        
-        :oneByOne="false"
+        :uploadSuccess="success"
+        :uploadError="error"
       >
 
+      :uploadProgress="progress"
+      :oneByOne="false"
         @validatorCallback="validatorfn"
         :accept="accept"
         :drag="false"
@@ -38,22 +39,47 @@ export default {
   },
   mounted(){},
   methods:{
+
+    //获取文件
     getFilefn(fl){
+      console.log(fl);
+
       return new Promise(function(resolve, reject){
-        setTimeout(()=>{
+        if(fl.length>2){
+          alert('>2')
+          reject()
+        }else{
           resolve()
-        },1000)
+        }
       })
     },
+
+    // 上传前
     beforeUploadfn(i){
       return new Promise(function(resolve, reject){
-        console.log('ppppppppppp')
-        setTimeout(()=>{
+        if(i.type.indexOf('mp4')>=0){
+          alert('不能上传mp4文件！');
+          reject()
+        }else {
           resolve()
-        },1000)
+        }
+
       })
-    }
+    },
+
+    // 进度
+    progress(t,file){
+      console.log(`${file.name} : `,t)
+    },
+
+    success(res,file){
+      console.log(`${file.name} - 长传成功 : `,res)
+    },
+
+    error(res,file){
+      console.log(`${file.name} - 长传失败 : `,res)
+    },
+
   }
 }
 </script>
-

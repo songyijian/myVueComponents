@@ -10,7 +10,7 @@ axios.defaults.retryDelay = 1000
 
 // 上行拦截
 axios.interceptors.request.use(config => {
-  console.log('上行拦截',config)
+  // console.log('上行拦截',config)
   if (config.method === 'post' && config.headers['Content-Type'] !== "multipart/form-data") {
     config.data = qs.stringify(config.data)
   }

@@ -8,7 +8,7 @@
 accept 属性接受一个逗号分隔的 MIME 类型字符串, 如:
   accept="image/png" or accept=".png" — 只接受 png 图片.
   accept="image/png, image/jpeg" or accept=".png, .jpg, .jpeg" — PNG/JPEG 文件.
-  accept="image/*" — 接受任何图片文件类型. 
+  accept="image/*" — 接受任何图片文件类型.
   accept=".doc,.docx,.xml,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document" — 接受任何 MS Doc 文件类型.
  -->
 
@@ -20,7 +20,7 @@ accept 属性接受一个逗号分隔的 MIME 类型字符串, 如:
      @dragenter.prevent="dragenter($event)"
      @dragover.prevent
     >
-      <input type="file" ref="file" style="display:none" 
+      <input type="file" ref="file" style="display:none"
         :webkitdirectory="directory"
         @change="inputGetfile($event)"
         :disabled="disabled"
@@ -29,7 +29,7 @@ accept 属性接受一个逗号分隔的 MIME 类型字符串, 如:
       </input>
       <slot></slot>
     </div>
-	  <div id="preview"></div> 
+	  <div id="preview"></div>
   </div>
 </template>
 
@@ -80,12 +80,21 @@ accept 属性接受一个逗号分隔的 MIME 类型字符串, 如:
         type: Object,
         default:null
       },
-      getFile:{
+      getFile:{         //获取文件钩子
         type: Function
       },
       beforeUpload:{    //发送前钩子
         type: Function
-      }
+      },
+      uploadProgress:{    //进度
+        type: Function
+      },
+      uploadSuccess:{    //成功
+        type: Function
+      },
+      uploadError:{    //失败
+        type: Function
+      },
     },
     data() {
       return {
@@ -97,7 +106,7 @@ accept 属性接受一个逗号分隔的 MIME 类型字符串, 如:
         //   //   status:,      //0=未开始，1=上传中，2=上传完成 -1=上传失败 -2=本次上传被跳过
         //   //   Progress:0,   //进度0～100
         //   // }
-        // ] 
+        // ]
       }
     },
     mounted(){ },
@@ -108,7 +117,7 @@ accept 属性接受一个逗号分隔的 MIME 类型字符串, 如:
         file.value = ''
         file.click()
       },
-      
+
       // 拖拽逻辑
       drop(event){
         if(this.disabled || !this.drag) return;
@@ -145,17 +154,17 @@ accept 属性接受一个逗号分隔的 MIME 类型字符串, 如:
         console.log(1)
         /**
         * @Description: getFile属性支持返回值
-        * @return: {promise} 
+        * @return: {promise}
         *   promise ：里面有异步逻辑的时候非常有用
         *            resolve([])继续 ,【fileList】可返回重置文件列表（剔除、添加）
         *            reject 终止后续动作
         */
         if(typeof this.getFile !== 'function'){
           console.log(2);
-          this.submit(); 
+          this.submit();
           return
         }
-      
+
         try {
           await this.getFile(fl).then(data=>{
             console.log(2,'可以重置，文件列表')
@@ -167,18 +176,14 @@ accept 属性接受一个逗号分隔的 MIME 类型字符串, 如:
             console.log('Promise','终止...')
           })
         } catch (error) {
-          throw `getFile 返回值必须是 Promise！\n ${error}`
+          throw `getFile返回值必须是Promise！\n ${error}`
         }
       },
 
-      // 触发上传
-      // submit(){
-      //   console.log(3);
-      //   this.uploadEvent()
-      // },
 
+      // 触发上传
       async submit(){
-        console.log(4);
+        console.log(3);
         // 参数整理
         const setFormData = (filesObj)=>{
           try {
@@ -207,10 +212,10 @@ accept 属性接受一个逗号分隔的 MIME 类型字符串, 如:
           let i = 0
           console.log(4.1,typeof this.beforeUpload)
           for(i; i<ls; i++){
-            if(typeof this.beforeUpload !== "function"){ 
+            if(typeof this.beforeUpload !== "function"){
               // 发送逻辑
-              this.http(setFormData(fs[i]))
-              return 
+              this.http(setFormData(fs[i]),fs[i])
+              return
             }
             let lock = null //循环锁
             try {
@@ -225,21 +230,19 @@ accept 属性接受一个逗号分隔的 MIME 类型字符串, 如:
               throw `beforeUpload 返回值必须是 Promise！\n ${error}`
               continue;
             }
-
-            this.http(setFormData(fs[i]))
+            this.http(setFormData(fs[i]),fs[i])
           }
 
         }else{
-          if(typeof this.beforeUpload !== "function"){ 
+          if(typeof this.beforeUpload !== "function"){
             // 发送逻辑
-            this.http(setFormData(fs))
-            return 
+            this.http(setFormData(fs),fs)
+            return
           }
           try {
             await this.beforeUpload(fs).then(data=>{
-              this.http(setFormData(fs))
-            })
-            .catch(data=>{
+              this.http(setFormData(fs),fs)
+            }).catch(data=>{
               if(data==='break'){}
             })
           } catch (error) {
@@ -250,25 +253,21 @@ accept 属性接受一个逗号分隔的 MIME 类型字符串, 如:
       },
 
       // 上传方法
-      http(data){
+      http(formData,file){
         console.log('http:' + 5);
         if(axios){
           let self = this
           let config = {
               onUploadProgress: ev => {
                 let complete = (ev.loaded / ev.total * 100 | 0)
-                this.uploadProgress(complete,data,ev.loaded, ev.total)
+                this.uploadProgressFn(complete,file,ev.loaded, ev.total)
               },
-              headers: {
-                'Content-Type': 'multipart/form-data'
-              }
+              headers: { 'Content-Type': 'multipart/form-data'}
           }
-          axios.post(this.action,data,config).then(res=>{
-            if (res.status == 200) {
-              this.uploadSuccess(data,res)
-            } else {
-              this.uploadError(data,res)
-            }
+          axios.post(this.action,formData,config).then(res=>{
+            this.uploadSuccessFn(res,file)
+          }).catch(res=>{
+            this.uploadErrorFn(res,file)
           })
 
         }else{
@@ -277,16 +276,16 @@ accept 属性接受一个逗号分隔的 MIME 类型字符串, 如:
             xhr.open("POST", this.action, true);
             xhr.onload = (evt) =>{
               if (xhr.status == 200) {
-                this.uploadSuccess(data,evt.target.responseText)
+                this.uploadSuccessFn(file,evt.target.responseText)
               } else {
-                this.uploadError(data,evt.target.responseText)
+                this.uploadErrorFn(file,evt.target.responseText)
               }
             }
             // 获取上传进度
             xhr.upload.onprogress = (event)=>{
               if (event.lengthComputable) {
                 let complete = Math.floor(event.loaded / event.total * 100)
-                this.uploadProgress(complete,data,event.loaded, event.total)
+                this.uploadProgressFn(complete,file,event.loaded, event.total)
               }
             }
             xhr.send(data);
@@ -299,23 +298,21 @@ accept 属性接受一个逗号分隔的 MIME 类型字符串, 如:
        * @param {Number}  step    0~100
        * @param {obj}     file    当前文件
        * @param {type}    loaded  上传了多少
-       * @param {type}    total   总量 
+       * @param {type}    total   总量
        */
-      uploadProgress(step,file,loaded,total){
-        console.log(step)
+      uploadProgressFn(step,file,loaded,total){
+        typeof this.uploadProgress === 'function' && this.uploadProgress(step,file,loaded,total)
       },
       /**
-       * @Description: uploadSuccess 、uploadError
+       * @Description: uploadSuccessFn 、uploadErrorFn
        * @param {file}  file 当前文件
        * @param {res}  res 当前文件
        */
-      uploadSuccess(file,res){
-        alert('2222')
-        console.log(file,res)
+      uploadSuccessFn(res,file){
+        typeof this.uploadSuccess === 'function' && this.uploadSuccess(res,file)
       },
-      uploadError(file,res){
-        alert('000')
-        console.log(file,res)
+      uploadErrorFn(res,file){
+        typeof this.uploadError === 'function' && this.uploadError(res,file)
       }
 
     },
@@ -329,7 +326,7 @@ accept 属性接受一个逗号分隔的 MIME 类型字符串, 如:
 <style scoped lang="scss">
   $pcolor : #409EFF;
   $color_main: #409EFF;
-  
+
   #drop_area{
     box-sizing: border-box;
     background-color: #fff;
