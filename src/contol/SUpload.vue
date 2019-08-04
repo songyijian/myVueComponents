@@ -4,40 +4,27 @@
  * @Date: 2019-07-29 19:37:08
  * @LastEditTime: 2019-08-02 19:57:05
  * @LastEditors: Please set LastEditors
-
-accept 属性接受一个逗号分隔的 MIME 类型字符串, 如:
-  accept="image/png" or accept=".png" — 只接受 png 图片.
-  accept="image/png, image/jpeg" or accept=".png, .jpg, .jpeg" — PNG/JPEG 文件.
-  accept="image/*" — 接受任何图片文件类型.
-  accept=".doc,.docx,.xml,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document" — 接受任何 MS Doc 文件类型.
  -->
 
 <template lang="html">
-  <div>
-    <div id="drop_area" @click="onClick" :class="{'disabled':disabled, 'drage':drageStyle}"
-     @drop.prevent="drop($event)"
-     @dragleave.prevent="dragleave($event)"
-     @dragenter.prevent="dragenter($event)"
-     @dragover.prevent
-    >
-      <input type="file" ref="file" style="display:none"
-        :webkitdirectory="directory"
-        @change="inputGetfile($event)"
-        :disabled="disabled"
-        :multiple="multiple"
-        :accept="accept">
-      </input>
-      <slot></slot>
-    </div>
-	  <div id="preview"></div>
-  </div>
+<div id="drop_area" @click="onClick" :class="{'disabled':disabled, 'drage':drageStyle}"
+   @drop.prevent="drop($event)"
+   @dragleave.prevent="dragleave($event)"
+   @dragenter.prevent="dragenter($event)"
+   @dragover.prevent
+  >
+    <input type="file" ref="file" style="display:none"
+      :webkitdirectory="directory"
+      @change="inputGetfile($event)"
+      :disabled="disabled"
+      :multiple="multiple"
+      :accept="accept">
+    </input>
+    <slot></slot>
+</div>
 </template>
 
 <script lang="js">
-  function isPromise(o) {
-    return Object.prototype.toString.call(o).slice(8, -1) === 'Promise'
-  }
-
   export default {
     name: 'SUpload',
     components: {},
@@ -99,14 +86,7 @@ accept 属性接受一个逗号分隔的 MIME 类型字符串, 如:
     data() {
       return {
         drageStyle:false,  //拖入样式
-        fileList:[],
-        // filesStaus:[        //文件的上传状态
-        //   // {
-        //   //   file:,        //文件对象
-        //   //   status:,      //0=未开始，1=上传中，2=上传完成 -1=上传失败 -2=本次上传被跳过
-        //   //   Progress:0,   //进度0～100
-        //   // }
-        // ]
+        fileList:[]
       }
     },
     mounted(){ },
@@ -121,7 +101,7 @@ accept 属性接受一个逗号分隔的 MIME 类型字符串, 如:
       // 拖拽逻辑
       drop(event){
         if(this.disabled || !this.drag) return;
-        this.drageStyle = false
+        this.drageStyle && (this.drageStyle = false)
         //获取文件对象
         let fileList = Array.from( event.dataTransfer.files )
         // 格式校验，未完成。。。
@@ -131,7 +111,6 @@ accept 属性接受一个逗号分隔的 MIME 类型字符串, 如:
         })
         // 不支持多选逻辑
         !this.multiple && this.fileList.length > 0 && (this.fileList = this.fileList[0])
-
         this.getFileFn()
       },
       dragleave(){
@@ -151,7 +130,6 @@ accept 属性接受一个逗号分隔的 MIME 类型字符串, 如:
 
       // 钩子函数区
       async getFileFn(fl = this.fileList){
-        console.log(1)
         /**
         * @Description: getFile属性支持返回值
         * @return: {promise}
@@ -160,8 +138,7 @@ accept 属性接受一个逗号分隔的 MIME 类型字符串, 如:
         *            reject 终止后续动作
         */
         if(typeof this.getFile !== 'function'){
-          console.log(2);
-          this.submit();
+          this.submit()
           return
         }
 
@@ -173,7 +150,7 @@ accept 属性接受一个逗号分隔的 MIME 类型字符串, 如:
               this.submit()
             }
           }).catch(data=>{
-            console.log('Promise','终止...')
+            console.log('Promise 终止...')
           })
         } catch (error) {
           throw `getFile返回值必须是Promise！\n ${error}`
@@ -183,7 +160,6 @@ accept 属性接受一个逗号分隔的 MIME 类型字符串, 如:
 
       // 触发上传
       async submit(){
-        console.log(3);
         // 参数整理
         const setFormData = (filesObj)=>{
           try {
@@ -210,10 +186,10 @@ accept 属性接受一个逗号分隔的 MIME 类型字符串, 如:
         if(this.oneByOne){
           let ls = fs.length
           let i = 0
+          console.log(fs);
           console.log(4.1,typeof this.beforeUpload)
           for(i; i<ls; i++){
             if(typeof this.beforeUpload !== "function"){
-              // 发送逻辑
               this.http(setFormData(fs[i]),fs[i])
               return
             }
@@ -235,16 +211,13 @@ accept 属性接受一个逗号分隔的 MIME 类型字符串, 如:
 
         }else{
           if(typeof this.beforeUpload !== "function"){
-            // 发送逻辑
             this.http(setFormData(fs),fs)
             return
           }
           try {
             await this.beforeUpload(fs).then(data=>{
               this.http(setFormData(fs),fs)
-            }).catch(data=>{
-              if(data==='break'){}
-            })
+            }).catch(data=>{})
           } catch (error) {
             throw `beforeUpload 返回值必须是 Promise！\n ${error}`
           }
@@ -254,7 +227,6 @@ accept 属性接受一个逗号分隔的 MIME 类型字符串, 如:
 
       // 上传方法
       http(formData,file){
-        console.log('http:' + 5);
         if(axios){
           let self = this
           let config = {
@@ -326,7 +298,6 @@ accept 属性接受一个逗号分隔的 MIME 类型字符串, 如:
 <style scoped lang="scss">
   $pcolor : #409EFF;
   $color_main: #409EFF;
-
   #drop_area{
     box-sizing: border-box;
     background-color: #fff;
@@ -343,7 +314,6 @@ accept 属性接受一个逗号分隔的 MIME 类型字符串, 如:
       border: 1px dashed $pcolor;
     }
   }
-
   #drop_area.disabled{
     background-color: #f5f7fa;
     border-color: #e4e7ed;
@@ -353,6 +323,5 @@ accept 属性接受一个逗号分隔的 MIME 类型字符串, 如:
   #drop_area.drage{
     border: 2px dashed $pcolor;
     background-color: #409eff2e;
-
   }
 </style>
