@@ -1,4 +1,4 @@
-/** 
+/**
  * @Description: 小时周期控件
  * @Author: yijian.song
  * @LastEditors: Please set LastEditors
@@ -9,7 +9,7 @@
   v 20190729
     API：
       setType 改为 disabled,
-      originVal 改为 val, 
+      originVal 改为 val,
       onChange 改为 change
     算法函数修改
   v 20190718
@@ -27,7 +27,7 @@ API
     :tdSize="30"        #每个格子的大小(px) 不<16
     :timeHeight="30"    #0-23小时列快速选择按钮高度(px) 不<16
     :dayWidth="50"      #周1-7行速选择按钮宽度(px) 不<16 [高度是根据tdSize算出来的]
-*/ 
+*/
 
 
 <template lang="html">
@@ -73,58 +73,38 @@ API
 <script>
 
 /**
- * v 2019.07.30 修复末尾错误
- * 
- * 找出单层数组，重复值的始末位置
- * @param {Array} arr 
- * @param {string | number} val 筛选样本
- * @param {number} keep 连续重复位数 注意：别他妈给我个1，一位算重复吗？
- * @return {Array}  
- *  RepeatBit([1, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 1, 0, 0, 1, 1, 0, 1], 1, 2) 
- *      >[{"val":1,"length":3,"start":0,"end":2},{"val":1,"length":4,"start":5,"end":8},{"val":1,"length":2,"start":14,"end":15}]
+ * @Description: 数组中重复值的始末位 （上面的那个好理解,性能要高一点）
+ * @param {array} arr 对象
+ * @param {array} val 筛选样本（要查重的元素）
+ * @param {array} keep  重复的步数
+ * @return: {array}  [ { val: '筛选样本', length:'重复了几次', start:'重复值在数组的始位置索引', end: '重复值在数组的结束位置索引' }]
+ * @Author: yijian.song
+ *  RepeatBit_One([...'011000111101011110'],1)  >[ { val: 1, length: 4, start: 6, end: 9 },{ val: 1, length: 4, start: 13, end: 16 } ]
  */
-function RepeatBit(arr, val, keep = 3) {
-  if (!Array.isArray(arr)) { return Error('参数必须是合法数组') }
-  if (typeof val === 'undefined') { return Error('重复参考样本不能为空') }
-  var start = arr.length + 1, 
-      m = [],
-      setState = function (index) {
-        if (index - start >= keep) {
-          m.push({
-            val: val,
-            length: index - start,
-            start: start,
-            end: (index - 1)
-          })
-        }
-        start = arr.length + 1
-      };
-  for (let i = 0; i < arr.length; i++) {
-    if (arr[i] == val) {
-      if (start > i)start = i;
-      // 最后一位差异处理
-      if ((i == arr.length - 1) && (i - start >= keep - 1)) {
-        m.push({
-          val: val,
-          length: (i+1 - start),
-          start: start,
-          end: i
-        })
-        start = arr.length + 1
-      }
-    } else {
-      if (i - start >= keep) {
-        m.push({
-          val: val,
-          length: i - start,
-          start: start,
-          end: (i - 1)
+function RepeatBit(arr,val,keep=3) {
+  if(!Array.isArray(arr)){ return Error('参数必须是合法数组')}
+  if (typeof val === 'undefined') { return Error('重复参考样本不能为空')}
+  var m =[], gs=[], t=0, y=1;
+  arr.forEach((item, index) => {
+    item == val ? m.push(index) : null
+  })
+  for (; t < m.length-1; ){
+    if (m[t + y] - m[t] === y) {
+      y++
+    }else{
+      if(y>keep-1){
+        gs.push({
+          val:val,
+          length: m[t + y - 1] - m[t]+1,
+          start: m[t],
+          end: m[t + y - 1]
         })
       }
-      start = arr.length + 1
+      t=t+y;
+      y=1;
     }
   }
-  return m
+  return gs
 }
 
 export default {
@@ -430,10 +410,10 @@ export default {
     /* 块 */
     .time_bloack_box{ float: left; position: relative;}
     .time_bloack_box *{font-size: 0;}
-    .time_bloack_box span{ height: 25px;display: inline-block; border: 0.5px solid $color_ccc; background: #e9e8ec}
+    .time_bloack_box span{height: 25px;display: inline-block; border: 0.5px solid $color_ccc; background: #e9e8ec}
     .time_bloack_box .schedule_time_item_yes{background-color: $color;}
     .time_bloack_box>div{ position: relative;}
-    .time_bloack_box>div>i{display:inline-block; position: absolute; top: 0;font-size: 13px; font-weight: bold; top: 0; text-align: center; color: #fff; background:$color_tiem_txt_bg;}
+    .time_bloack_box>div>i{display:inline-block; position: absolute; top: 0; font-size: 13px !important; font-weight: bold; top: 0; text-align: center; color: #fff; background:$color_tiem_txt_bg;}
     .time_bloack_box>div>i:hover{ font-size: 0; background: 0; height:0}
     em.move_bg{ background:rgba(0,0,0,0.6); position: absolute; display: none; z-index: 2;}
   /* 脚 */

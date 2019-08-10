@@ -1,22 +1,26 @@
 <template>
   <div>
     <h1>SUpload - 文件上传</h1>
+        :style="{border: '5px dashed red'}"
     <div>
       <SUpload
         action="http://localhost:80/upload/"
         :getFile="getFilefn"
         :beforeUpload="beforeUploadfn"
-        :data="{a:1,b:2}"
         :uploadSuccess="success"
         :uploadError="error"
         :uploadProgress="progress"
+        :data="{a:1,b:2}"
+        ref="updom"
+        :accept="accept"
       >
+        :autoUpload="false"
         <p>将文件拖拽到此区域;</p>
-        <p>image/gif,image.jpeg,image/png,video/mp4</p>
+        <p>image/gif,image/jpeg,image/png,video/mp4</p>
       </SUpload>
 
-      <ul v-if="fls">
-        <li v-for="(value, key, index) in fls">
+      <ul v-if="uploadFileListStatus">
+        <li v-for="(value, key) in uploadFileListStatus" :key="key">
           <img :src="value.imgUrl" alt="">
           <p>
             {{key}} - {{value.uploadProgress}} - {{value.status==0? '未完成' : '完成'}}
@@ -24,6 +28,7 @@
         </li>
       </ul>
     </div>
+    <div @click="submit"> 点击上传 </div>
   </div>
 </template>
 
@@ -33,15 +38,15 @@ import SUpload from '~contol/SUpload'
 import { Promise } from 'q';
 
 function getObjectURL(file) {
-    var url = null;
-    if (window.createObjcectURL != undefined) {
-        url = window.createOjcectURL(file);
-    } else if (window.URL != undefined) {
-        url = window.URL.createObjectURL(file);
-    } else if (window.webkitURL != undefined) {
-        url = window.webkitURL.createObjectURL(file);
-    }
-    return url;
+  var url = null;
+  if (window.createObjcectURL != undefined) {
+      url = window.createOjcectURL(file);
+  } else if (window.URL != undefined) {
+      url = window.URL.createObjectURL(file);
+  } else if (window.webkitURL != undefined) {
+      url = window.webkitURL.createObjectURL(file);
+  }
+  return url;
 }
 
 export default {
@@ -50,22 +55,22 @@ export default {
   data(){
     return({
       accept:'image/gif,image/jpeg,image/png,video/mp4',
-      fls:null
+      uploadFileListStatus:null,
+      sy:{border: '1px dashed red'}
     })
   },
   mounted(){},
   methods:{
 
     //获取文件
-    getFilefn(fl){
-      console.log('获取文件',1);
+    getFilefn(files){
       return new Promise((resolve, reject)=>{
-        if(fl.length>3){
-          alert('上传不应超过10个')
+        if(files.length>5){
+          alert('最多同时上传5个文件')
           reject()
         }else{
           let filesObj = {}
-          fl.forEach(item=>{
+          files.forEach(item=>{
             let k = item.name
             filesObj[k] = ({
               imgUrl:getObjectURL(item),
@@ -75,16 +80,17 @@ export default {
               file:item,
             })
           })
-          this.fls = filesObj
+          this.uploadFileListStatus = filesObj
           resolve()
         }
       })
+
     },
 
     // 上传前
     beforeUploadfn(file){
       console.log('获取文件',2);
-      return new Promise(function(resolve, reject){
+      return new Promise((resolve, reject)=>{
         if(Array.isArray(file)){
           console.log('one by one')
           if (file.size >1204*5) {
@@ -107,11 +113,14 @@ export default {
 
     success(res,file){
       this.fls[file.name].status=1
-      console.log(`${file.name} - 长传成功 : `,res)
+      console.log(`${file.name} - 上传成功 : `,res)
     },
 
     error(res,file){
-      console.log(`${file.name} - 长传失败 : `,res)
+      console.log(`${file.name} - 上传失败 : `,res)
+    },
+    submit(){
+      this.$refs.updom.submit()
     }
 
   }

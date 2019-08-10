@@ -4,7 +4,7 @@ import router from '~router/index.js'
 import store from './store'
 import axios from '~config/http.config.js'
 // mock 数据
-// import '~mock/index.js'
+import '~mock/index.js'
 // 样式
 import '~style/reset.scss'
 import '~style/layout.scss'
@@ -13,7 +13,7 @@ import '~style/layout.scss'
 Vue.config.productionTip = false
 
 // http拓展到vue
-Vue.prototype.$http = axios 
+Vue.prototype.$http = axios
 Vue.prototype.$post = axios.post
 Vue.prototype.$get = function get(url, param) {
   return new Promise((resolve, reject) => {

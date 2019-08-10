@@ -7,7 +7,7 @@
     :sizeW="178"  //大小（px）
     :multiple="false"      //多文件上传默认false 暂时不支持
     :errTip="xxxxx"         //err展示文字
-    :validate=""            //验证状态控制 ‘err’ | ‘suc‘ 
+    :validate=""            //验证状态控制 ‘err’ | ‘suc‘
     :acceptArray="['image/jpeg','image/jpg','image/png']"   //允许上传的文件类型
     :disabled="false"     //禁用
     @onchange="fn"       //fn(fileData:{
@@ -28,7 +28,7 @@
     :sizeW="178"            //大小（px）
     :multiple="false"       //多文件上传默认false 暂时不支持
     :errTip="xxxxx"         //err展示文字
-    :validate=""            //验证状态控制 ‘err’ | ‘suc‘ 
+    :validate=""            //验证状态控制 ‘err’ | ‘suc‘
     :acceptArray="['image/jpeg','image/jpg','image/png']"   //允许上传的文件类型
     :disabled="false"    //禁用
     @onchange="fn"       //fn(fileData:{
@@ -82,7 +82,7 @@ options , 事件交互
   },
   type:{
     type: String,
-    default: "line" 
+    default: "line"
   },
   options:{type: Array,required: true},
   datasets:{ type: Object, required: true },
@@ -92,45 +92,137 @@ options , 事件交互
 
 ### SUpload - 更灵活的文件上传控件
 ```
-
-api
-
-* 钩子函数
-
-  //获取文件，拖拽已把不符合剔除
-  :getFile(fileList)
-
-
-
-  //验证阶段（符合accept的文件list），可以进一步校验剔除你不想要的
-  //这是个用属性传入的func
-  :validatorCallback(fileList,callbackFn)   
-
-  // 上传执行函数，可以被动调用执行上传动作
-  @submit
-
+<SUpload
+  :disabled="false"     //不可编辑（默认false可编辑）
+  :drag="true"          //是否可拖拽（默认true可拖拽）
+  :multiple="true"      //多文件上传（默认true）
+  :accept=""            //上传文件类型，只支持image/png,video/mp4写法
+  :directory="false"    //选择文件夹（默认false不支持,true可以选中文件夹（不能选中文件）会将文件夹下所以文件纳入）
+  :action=""            //上传地址(空不会调用submint)
+  :autoUpload="true"    //获取文件主动上传（action不存在无效）
+  :oneByOne="true"      //多文件多次上传(false多个文件一次性上传)
+  :data=""              //上传时附带的额外参数{key:val},key=val
+>
+  <!-- 插槽 -->
+  <p>将文件拖拽到此区域;</p>
+  <p>image/gif,image.jpeg,image/png,video/mp4</p>
+</SUpload>
 
 
-* 条件配置
+钩子（属性函数）
 
-  // 是否多次提交
-  oneByOne = "true"    //true=一个接一个 | false=一起性上传
-  //Together
+:getFile(fileList)
+  /**
+    * @Description: 组建读取文件的回调
+    * @param {array}      fileList    合法文件列表
+    * @return: {Promise}  这个钩子必须返回一个Promise
+                          reject()    阻断后续上传等周期活动
+                          resolve()   继续后续动作
+                          resolve([file]) 可用过传参数重置文件列表,文件会被校验有问题会抛出异常
 
-  // 是否主动上传
-  autoUpload = "true"  
+        getFilefn(fl){
+          return new Promise((resolve, reject)=>{
+            if(fl.length>3){
+              alert('上传不应超过3个')
+              reject()
+            }else{
+              let filesObj = {} //记录上传文件以及状态数据
+              fl.forEach(item=>{
+                let k = item.name
+                filesObj[k] = ({
+                  imgUrl:getObjectURL(item),
+                  uploadProgress:0,
+                  status:0,
+                  imgName:item.name,
+                  file:item,
+                })
+              })
+              this.fls = filesObj
+              resolve()
+            }
+          })
+        },
+    */
 
-  //上传地址,为空时不会执行任何上传动作
-  action = '*/*'
 
-  // 是否选择多文件,false = drag下选择符合（accept属性的）的第一个
-  multiple = "true"
+:beforeUpload(files)
+  /**
+  * @Description: 文件上传前的钩子
+  * @param {obj|array}  files     本次发出文件对象，onebyone=fasle为文件列表
+  * @return: {Promise}  reject()  阻断本次上传
+                        reject('break')  阻断后续所以的上传动作（对onebyone有意义）
+                        resolve() 继续上传
 
-  // 不可编辑
-  disabled = "false"  
-  //
-  drag
+      beforeUpload(file){
+        return new Promise(function(resolve, reject){
+          if(Array.isArray(file)){
+            console.log('one by one')
+            if (file.size >1204*5) {
+              console.log('文件过大')
+              reject()
+            }else {
+              resolve()
+            }
+          }else{
+            resolve()
+          }
+        })
+      },
+  */
+
+
+:uploadProgress(step,file,loaded,total)
+  /**
+  * @Description: 文件上传进度回调函数
+  * @param {number}  step    上传进度0～100
+  * @param {obj}     file    当前文件
+  * @param {type}    loaded  上传了多少
+  * @param {type}    total   总量
+
+      progress(t,file){
+        console.log(`${file.name} : `,t)
+        this.fls[file.name].uploadProgress=t
+      },
+  */
+
+
+
+:uploadSuccess(res,file)
+  /**
+  * @Description: 成功回调，这里是只状态码200
+  * @param {obj}  res   
+  * @param {obj}     file    当前文件
+
+    success(res,file){
+      this.fls[file.name].status=1
+      console.log(`${file.name} - 长传成功 : `,res)
+    },
+  */
+
+
+
+:uploadError(res,file)
+  /**
+  * @Description: 错误回调，这里是只状态码200
+  * @param {obj}  res   
+  * @param {obj}     file    当前文件
+
+    error(res,file){
+      console.log(`${file.name} - 长传失败 : `,res)
+    },
+  */
+
+
+
+其他：
+  被动上传，请调用控件内部submit()
+  文件参数：key=文件的name，value=文件
+  样式 :style="{border: '5px dashed red'}"
+
+关于上传：
+  默认使用axios,（组建内部会检查window.axios是否存在）
+  不存在就走内部原生ajax方法
+
+
 
 ```
-
-
