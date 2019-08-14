@@ -73,39 +73,62 @@ API
 <script>
 
 /**
- * @Description: 数组中重复值的始末位 （上面的那个好理解,性能要高一点）
- * @param {array} arr 对象
- * @param {array} val 筛选样本（要查重的元素）
- * @param {array} keep  重复的步数
- * @return: {array}  [ { val: '筛选样本', length:'重复了几次', start:'重复值在数组的始位置索引', end: '重复值在数组的结束位置索引' }]
- * @Author: yijian.song
- *  RepeatBit_One([...'011000111101011110'],1)  >[ { val: 1, length: 4, start: 6, end: 9 },{ val: 1, length: 4, start: 13, end: 16 } ]
+ * v 2019.07.30 修复末尾错误
+ *
+ * 找出单层数组，重复值的始末位置
+ * @param {Array} arr
+ * @param {string | number} val 筛选样本
+ * @param {number} keep 连续重复位数 注意：别他妈给我个1，一位算重复吗？
+ * @return {Array}
+ *  RepeatBit([1, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 1, 0, 0, 1, 1, 0, 1], 1, 2)
+ *      >[{"val":1,"length":3,"start":0,"end":2},{"val":1,"length":4,"start":5,"end":8},{"val":1,"length":2,"start":14,"end":15}]
  */
-function RepeatBit(arr,val,keep=3) {
-  if(!Array.isArray(arr)){ return Error('参数必须是合法数组')}
-  if (typeof val === 'undefined') { return Error('重复参考样本不能为空')}
-  var m =[], gs=[], t=0, y=1;
-  arr.forEach((item, index) => {
-    item == val ? m.push(index) : null
-  })
-  for (; t < m.length-1; ){
-    if (m[t + y] - m[t] === y) {
-      y++
-    }else{
-      if(y>keep-1){
-        gs.push({
-          val:val,
-          length: m[t + y - 1] - m[t]+1,
-          start: m[t],
-          end: m[t + y - 1]
+
+function RepeatBit(arr, val, keep = 3) {
+  if (!Array.isArray(arr)) { return Error('参数必须是合法数组') }
+  if (typeof val === 'undefined') { return Error('重复参考样本不能为空') }
+  var start = arr.length + 1,
+      m = [],
+      setState = function (index) {
+        if (index - start >= keep) {
+          m.push({
+            val: val,
+            length: index - start,
+            start: start,
+            end: (index - 1)
+          })
+        }
+        start = arr.length + 1
+      };
+  for (let i = 0; i < arr.length; i++) {
+    if (arr[i] == val) {
+      if (start > i)start = i;
+      // 最后一位差异处理
+      if ((i == arr.length - 1) && (i - start >= keep - 1)) {
+        m.push({
+          val: val,
+          length: (i+1 - start),
+          start: start,
+          end: i
+        })
+        start = arr.length + 1
+      }
+    } else {
+      if (i - start >= keep) {
+        m.push({
+          val: val,
+          length: i - start,
+          start: start,
+          end: (i - 1)
         })
       }
-      t=t+y;
-      y=1;
+      start = arr.length + 1
     }
+
   }
-  return gs
+  return m
 }
+
 
 export default {
   name: 'Schedule',
@@ -393,15 +416,12 @@ export default {
   $color:#409eff;
   $color_tiem_txt_bg:rgba(64, 158, 255,0.7);
   $color_ccc:#bcc6d0;
-
-  /* background:#fff; */
   .schedule_box{padding:8px; background:#f5f5f5db; display: inline-block; position: relative; overflow: hidden;  box-sizing:content-box;color: #1f2d3d;
     -moz-user-select: -moz-none; -moz-user-select: none; -o-user-select:none; -khtml-user-select:none; -webkit-user-select:none; -ms-user-select:none; user-select:none; }
   .schedule_box *{ box-sizing: border-box; margin: 0; padding: 0}
   /* 0~24 */
   .time_title_box{  font-size: 0; }
   .time_title_box>span{font-size: 13px; display: inline-block; text-align: center; border: 1px solid #eaeefb; line-height: 20px}
-
   /* 主体 */
   .schedule_body_box{ overflow: hidden; font-size: 0;}
     /* 周 1～7 */
@@ -409,15 +429,13 @@ export default {
     .day_title_box>span{font-size: 13px; border: 1px solid #eaeefb; }
     /* 块 */
     .time_bloack_box{ float: left; position: relative;}
-    .time_bloack_box *{font-size: 0;}
-    .time_bloack_box span{height: 25px;display: inline-block; border: 0.5px solid $color_ccc; background: #e9e8ec}
+    .time_bloack_box span{font-size: 0; height: 25px;display: inline-block; border: 0.5px solid $color_ccc; background: #e9e8ec}
     .time_bloack_box .schedule_time_item_yes{background-color: $color;}
     .time_bloack_box>div{ position: relative;}
     .time_bloack_box>div>i{display:inline-block; position: absolute; top: 0; font-size: 13px !important; font-weight: bold; top: 0; text-align: center; color: #fff; background:$color_tiem_txt_bg;}
     .time_bloack_box>div>i:hover{ font-size: 0; background: 0; height:0}
     em.move_bg{ background:rgba(0,0,0,0.6); position: absolute; display: none; z-index: 2;}
   /* 脚 */
-  // .schedule_flter_box{font-size: 13px;line-height:40px; overflow: hidden;}
   .schedule_flter_box{font-size: 13px; overflow: hidden;}
   .schedule_flter_box>div{font-size: 13px; display: inline-block;}
   .schedule_flter_box>*:nth-child(n){font-size: 13px; display: inline-block;}

@@ -1,5 +1,6 @@
 <template>
   <div>
+    
     <h1>SUpload - 文件上传</h1>
         :style="{border: '5px dashed red'}"
     <div>

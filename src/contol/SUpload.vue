@@ -20,22 +20,22 @@
 </SUpload>
  -->
 
-<template lang="html">
-<div class="drop_area" @click="onClick" :class="{'disabled':disabled, 'drage':drageStyle}"
-   @drop.prevent="drop($event)"
-   @dragleave.prevent="dragleave($event)"
-   @dragenter.prevent="dragenter($event)"
-   @dragover.prevent
-  >
-    <input type="file" ref="file" style="display:none"
-      :webkitdirectory="directory"
-      @change="inputGetfile($event)"
-      :disabled="disabled"
-      :multiple="multiple"
-      :accept="accept">
-    </input>
-    <slot></slot>
-</div>
+<template>
+  <div class="drop_area" @click="onClick" :class="{'disabled':disabled, 'drage':drageStyle}"
+     @drop.prevent="drop($event)"
+     @dragleave.prevent="dragleave($event)"
+     @dragenter.prevent="dragenter($event)"
+     @dragover.prevent
+    >
+      <input type="file" ref="file" style="display:none"
+        :webkitdirectory="directory"
+        @change="inputGetfile($event)"
+        :disabled="disabled"
+        :multiple="multiple"
+        :accept="accept">
+      </input>
+      <slot></slot>
+  </div>
 </template>
 
 <script lang="js">
