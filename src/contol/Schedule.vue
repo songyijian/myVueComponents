@@ -5,28 +5,28 @@
  * @Date: 2019-05-05 13:42:24
  * @LastEditTime: 2019-07-30 10:50:11
 
-历史版本
-  v 20190729
-    API：
-      setType 改为 disabled,
-      originVal 改为 val,
-      onChange 改为 change
-    算法函数修改
-  v 20190718
-    硬核bug修复，tdsize设置最小值，val校验规则修改（错了自行检查不做提示）
-  v 20180727
-功能
-  1.支持单位框选、点选
-  2.行列快选、反选
-  3.快捷选择面板
-API
-  <Schedule @change="fn" :val="" />
-    :val="[]"           #必须是只包含1|0的168位数组 (1选，2未选)*
-    @change="fn"      #修改监听函数fn(val)
-    :disabled="true"    #是否可编辑
-    :tdSize="30"        #每个格子的大小(px) 不<16
-    :timeHeight="30"    #0-23小时列快速选择按钮高度(px) 不<16
-    :dayWidth="50"      #周1-7行速选择按钮宽度(px) 不<16 [高度是根据tdSize算出来的]
+ 历史版本
+   v 20190814
+     修复谷歌页面翻译造成的文字不能正确表示
+   v 20190729
+     setType改为disabled
+     逻辑回滚到v20180727（后悔药>健康）
+     算法函数修改
+   v 20190718
+     硬核bug修复，tdsize设置最小值，originVal校验规则修改（错了自行检查不做提示）
+   v 20180727
+ 功能
+   1.支持单位框选、点选
+   2.行列快选、反选
+   3.快捷选择面板
+ api
+   <Schedule @onchange="fn" :tdSize="30" :disabled="true" :originVal="[]" />
+     :originVal="[]"     #必须是只包含1|0的168位数组 (1选，2未选)*
+     @onchange="fn"      #修改监听函数fn(val)
+     :disabled="true"    #是否可编辑
+     :tdSize="30"        #每个格子的大小(px) 不<16
+     :timeHeight="30"    #0-23小时列快速选择按钮高度(px) 不<16
+     :dayWidth="50"      #周1-7行速选择按钮宽度(px) 不<16 [高度是根据tdSize算出来的]
 */
 
 
