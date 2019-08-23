@@ -2,23 +2,24 @@
  * @Description: 上传控件
  * @Author: yijian.song
  * @Date: 2019-07-29 19:37:08
- * @LastEditTime: 2019-08-06 10:56:31
+ * @LastEditTime: 2019-08-23 17:38:45
  * @LastEditors: Please set LastEditors
+ * @Version: 1.1.0
 
- <SUpload
-  :disabled="false"     //不可编辑（默认false可编辑）
-  :drag="true"          //是否可拖拽（默认true可拖拽）
-  :multiple="true"      //多文件上传（默认true）
-  :accept=""            //上传文件类型，只支持image/png,video/mp4写法
-  :directory="false"    //选择文件夹
-  :action=""            //上传地址(空不会调用submint)
-  :autoUpload="true"    //获取文件主动上传（action不存在无效）
-  :oneByOne="true"      //多文件多次上传(false多个文件一次性上传)
-  :data=""              //上传时附带的额外参数{key:val},key=val
->
-  <p>插槽</p>
-</SUpload>
- -->
+  <SUpload
+    :disabled="false"     //不可编辑（默认false可编辑）
+    :drag="true"          //是否可拖拽（默认true可拖拽）
+    :multiple="true"      //多文件上传（默认true）
+    :accept=""            //上传文件类型，只支持image/png,video/mp4写法
+    :directory="false"    //选择文件夹
+    :action=""            //上传地址(空不会调用submint)
+    :autoUpload="true"    //获取文件主动上传（action不存在无效）
+    :oneByOne="true"      //多文件多次上传(false多个文件一次性上传)
+    :data=""              //上传时附带的额外参数{key:val},key=val
+  >
+    <p>插槽</p>
+  </SUpload>
+-->
 
 <template>
   <div class="drop_area" @click="onClick" :class="{'disabled':disabled, 'drage':drageStyle}"
@@ -218,29 +219,29 @@
           for(i; i<ls; i++){
             if(typeof this.beforeUpload !== "function"){
               this.http(setFormData(fs[i]),fs[i])
-              return
+            }else{
+              let lock = null //循环锁
+              try {
+                /**
+                * @Description:
+                * @param {type}
+                * @return: {type}
+                * @Author: yijian.song
+                * @Date: 2019-08-05 14:59:14
+                */
+                await this.beforeUpload(fs[i]).then(data=>{
+                  lock = true
+                }).catch(data=>{
+                  lock = data === "break" ? data :false
+                })
+                if(lock===false){ continue;return } //跳出本次循环
+                if(lock==='break'){ break;return } //循环直接跳出
+              } catch (error) {
+                throw `beforeUpload返回值不是Promise | 返回值内部错误\n ${error}`
+                continue;
+              }
+              this.http(setFormData(fs[i]),fs[i])
             }
-            let lock = null //循环锁
-            try {
-              /**
-               * @Description:
-               * @param {type}
-               * @return: {type}
-               * @Author: yijian.song
-               * @Date: 2019-08-05 14:59:14
-               */
-              await this.beforeUpload(fs[i]).then(data=>{
-                lock = true
-              }).catch(data=>{
-                lock = data === "break" ? data :false
-              })
-              if(lock===false){ continue;return } //跳出本次循环
-              if(lock==='break'){ break;return } //循环直接跳出
-            } catch (error) {
-              throw `beforeUpload返回值不是Promise | 返回值内部错误\n ${error}`
-              continue;
-            }
-            this.http(setFormData(fs[i]),fs[i])
           }
 
         }else{
