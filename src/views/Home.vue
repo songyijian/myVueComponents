@@ -1,6 +1,7 @@
 <template>
   <div class="home">
     <h1>vue contol </h1>
+    <img :src="'~assets/logo.png'" alt="">
   </div>
 </template>
 
@@ -14,7 +15,7 @@ export default {
     // })
   },
   methods:{
-    
+
   }
 }
 </script>

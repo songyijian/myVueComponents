@@ -1,15 +1,15 @@
 <template lang="html">
   <div class="folding_box">
-    <div @click="openfn" class="header_box" :disabled="disabled" :class="{'not_allowed':disabled }">
+    <div @click="openfn" class="header_box" :class="{'disabledstyle':disabled }">
       <div class="icons_box">
-        <span class="icons folding_icon" :class="{'foldingOpen':status }" title="上传">&#xe8ee;</span>
+        <span class="icons folding_icon" :class="{'foldingOpen':open }" title="上传">&#xe8ee;</span>
       </div>
       <div class="header_title_box">
         <slot name="header"></slot>
       </div>
     </div>
 
-    <div v-show="status">
+    <div v-show="open">
       <slot name="body"></slot>
     </div>
   </div>
@@ -23,14 +23,14 @@
     :disabled="false" （boolean : 禁用）
     
   Events:
-    @onchange="" (func : 折叠动作回掉)
+    @change="" (func : 折叠动作回掉)
 
   domContent:(插槽slot)
     <template slot="header"> title txt </template> ( 头部内容 )
     <template slot="body" class="bodys"> body txt </template> （ 展开内容区域 ）
 
   案例：
-    <Folding @onchange="chengFn" >
+    <Folding @change="chengFn" >
       <template slot="header"> title txt </template>
       <template slot="body" class="bodys"> body txt </template>
     </Folding>
@@ -51,14 +51,15 @@ export default {
   components: {},
   data() {
     return {
+      open: this.status
       // status:false
     }
   },
   methods: {
     openfn(){
       if(!this.disabled){
-        this.status = !this.status
-        this.$emit('onchange',this.status)
+        this.open = !this.open
+        this.$emit('change',this.open)
       }
     }
   },
@@ -95,6 +96,6 @@ export default {
       .header_title_box{ flex:1 1 auto }
     }
     // 禁用
-    .header_box.not_allowed{ cursor: not-allowed}
+    .header_box.disabledstyle{ cursor: not-allowed}
   }
 </style>

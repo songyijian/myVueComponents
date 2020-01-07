@@ -1,8 +1,7 @@
 <template>
   <div>
-    
     <h1>SUpload - 文件上传</h1>
-        :style="{border: '5px dashed red'}"
+
     <div>
       <SUpload
         action="http://localhost:80/upload/"
@@ -29,6 +28,7 @@
         </li>
       </ul>
     </div>
+    
     <div @click="submit"> 点击上传 </div>
   </div>
 </template>
