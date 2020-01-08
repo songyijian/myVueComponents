@@ -7,7 +7,7 @@
     ></Schedule>
   </div>
   <div class="row">
-    <span class="btn" @click="disabledfn">编辑状态</span>
+    <span class="btn" @click="disabledfn">disabled: {{disabled}}</span>
   </div>
   <div class="row">{{gval}}</div>
   <pre>

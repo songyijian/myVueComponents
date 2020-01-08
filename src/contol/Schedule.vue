@@ -33,7 +33,7 @@
 <template lang="html">
   <div class="schedule_box">
     <input type="hidden" :value="value" >
-    <div :class="{'read_only':!disabled}" :style="{'width':`${(tdSize*24)+dayWidth}px`,'min-height':`${tdSize*7 + timeHeight + flterHeight}px` }" >
+    <div :class="{'disabledstyle':!disabled}" :style="{'width':`${(tdSize*24)+dayWidth}px`,'min-height':`${tdSize*7 + timeHeight + flterHeight}px` }" >
       <div class="time_title_box" :style="{ 'margin-left': dayWidth+'px','height':timeHeight+'px'}">
         <span v-for="item,index in time" :key="'t'+index" :data-index="index" @click="timeTitle(index)" :style="{'width':`${tdSize}px`,'line-height':timeHeight+'px'}">{{item}}</span>
       </div>
@@ -88,18 +88,7 @@ function RepeatBit(arr, val, keep = 3) {
   if (!Array.isArray(arr)) { return Error('参数必须是合法数组') }
   if (typeof val === 'undefined') { return Error('重复参考样本不能为空') }
   var start = arr.length + 1,
-      m = [],
-      setState = function (index) {
-        if (index - start >= keep) {
-          m.push({
-            val: val,
-            length: index - start,
-            start: start,
-            end: (index - 1)
-          })
-        }
-        start = arr.length + 1
-      };
+      m = [];
   for (let i = 0; i < arr.length; i++) {
     if (arr[i] == val) {
       if (start > i)start = i;
@@ -457,5 +446,13 @@ export default {
   .flter_btn_box>span{color: $color;background: #ecf5ff;border-color: #b3d8ff;}
   .flter_btn_box>span:hover{ color: #fff; background-color: $color; border-color: $color;}
   /* 只读 */
-  .schedule_box .read_only{opacity: 0.6; pointer-events: none; cursor: not-allowed !important; }
+  .schedule_box .disabledstyle{opacity: 0.6; pointer-events: none; cursor: not-allowed !important; }
+
+  // .disabledstyle .time_title_box>span,
+  // .disabledstyle .flter_btn_box>span,
+  // .disabledstyle .day_title_box>span,
+  // .disabledstyle .time_bloack_box{
+  //   cursor: not-allowed !important;
+  // }
+
 </style>
