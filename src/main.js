@@ -11,6 +11,8 @@ import '~style/layout.scss'
 
 
 Vue.config.productionTip = false
+Vue.config.devtools = true
+
 
 // http拓展到vue
 Vue.prototype.$http = axios

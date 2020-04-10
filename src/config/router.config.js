@@ -15,16 +15,23 @@ module.exports = routes = [
     name: 'Schedule',
     component: () => import('~views/DemoSchedule.vue')
   },
-  // {
-  //   path: '/test',
-  //   name: 'test',
-  //   component: () => import('~views/test.vue')
-  // },
   {
     path: '/DemoFolding',
     name: 'Folding',
     component: () => import('~views/DemoFolding.vue')
-  }
+  },
+  {
+    path: '/learn',
+    name: 'learn',
+    component: () => import('~views/LearnBox.vue'),
+    children:[
+      {
+        path: '/learn/event',
+        name: 'event',
+        component: () => import('~views/learn/event.vue')
+      },
+    ],
+  },
 ]
 
 
