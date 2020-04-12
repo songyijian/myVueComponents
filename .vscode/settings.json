@@ -10,7 +10,7 @@
     "editor.quickSuggestions": {
         "strings": true
     },
-    "window.zoomLevel": 0,
+    "window.zoomLevel": -1,
     "explorer.confirmDelete": true,
     "workbench.editor.enablePreviewFromQuickOpen": false,
     "emmet.triggerExpansionOnTab": true,

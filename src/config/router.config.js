@@ -7,31 +7,38 @@ module.exports = routes = [
   },
   {
     path: '/DemoSUpload',
-    name: 'SUpload',
+    name: 'DemoSUpload',
     component: () => import('~views/DemoSUpload.vue')
   },
   {
     path: '/DemoSchedule', //小时周期控件
-    name: 'Schedule',
+    name: 'DemoSUpload',
     component: () => import('~views/DemoSchedule.vue')
   },
   {
     path: '/DemoFolding',
-    name: 'Folding',
+    name: 'DemoSUpload',
     component: () => import('~views/DemoFolding.vue')
   },
   {
     path: '/learn',
     name: 'learn',
-    component: () => import('~views/LearnBox.vue'),
-    children:[
+    redirect: '/learn/event',
+    component: () => import('~views/LearnBox.vue'), 
+    children: [
       {
         path: '/learn/event',
         name: 'event',
         component: () => import('~views/learn/event.vue')
       },
+      {
+        path: '/learn/arrat',
+        name: 'arrat',
+        component: () => import('~views/learn/arrat.vue')
+      },
     ],
   },
+
 ]
 
 

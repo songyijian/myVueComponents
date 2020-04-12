@@ -12,7 +12,6 @@ yarn run test:e2e
 
 #### 路径配置 vue.config.js
 ```
-// vue.config.js
 chainWebpack(config) {
   // 路径配置
   config.resolve.alias
