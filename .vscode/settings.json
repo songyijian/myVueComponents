@@ -1,6 +1,4 @@
 {
-    // "editor.minimap.maxColumn": 30,
-    // "editor.formatOnPaste": true,
     "editor.minimap.enabled": false,
     "editor.multiCursorModifier": "ctrlCmd",
     "editor.tabSize": 2,
@@ -34,7 +32,6 @@
         "editor.insertSpaces": true,
         "editor.defaultFormatter": "HookyQR.beautify"
     },
-    // 头部注释
     "fileheader.customMade": {
         "Description": "",
         "Author": "yijian.song",
@@ -43,7 +40,6 @@
         "LastEditors":"yijian.song",
         "LastEditTime": "",
     },
-    // 函数注释 
     "fileheader.cursorMode": {
         "Description": "",
         "param": "",

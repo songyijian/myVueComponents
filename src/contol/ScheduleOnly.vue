@@ -41,7 +41,7 @@
         <div class="day_title_box" :style="{ 'width': dayWidth+'px' }">
           <span v-for="item,index in day" :key="item" @click="dayTitle(index)" :style="{'height':`${tdSize}px`,'line-height': `${tdSize}px`}">{{item}}</span>
         </div>
-        <div ref="time_bloack_box" class="time_bloack_box" @mousedown="down($event)" @mouseup="up($event)" @mousemove="move($event)" @mouseleave="leave($event)">
+        <div ref="time_bloack_box" class="time_bloack_box" @mousedown="down($event)" @mouseup="up($event)" @mousemove="move($event)">
           <div v-for="(itemf,indexf) in nowStatueArray" :key="'f'+indexf" :style="{height: `${tdSize}px`}" >
             <span v-for="(item,index) in itemf"
                   :style="{'width':`${tdSize}px`,'height':`${tdSize}px`}"
@@ -57,13 +57,13 @@
       </div>
       <div class="schedule_flter_box" :style="{ 'height': flterHeight+'px','line-height':flterHeight+'px'}">
         <div class="flter_btn_box">
-          快速设定：<span @click="dayTf('all')">全周</span>
-          <span @click="dayTf('restDay')">周一至周五</span>
-          <span @click="dayTf('workingDay')">周六日</span>
+          快速设定：<span @click="dayTf('all')">全周投放</span>
+          <span @click="dayTf('restDay')">周一到周五投放</span>
+          <span @click="dayTf('workingDay')">周末投放</span>
         </div>
         <div class="flter_msg_box">
-          <span><i class="play_b"></i> 有效时间 </span>
-          <span><i class="stop_b"></i> 无效时间 </span>
+          <span><i class="play_b"></i> 投放时间段 </span>
+          <span><i class="stop_b"></i> 暂停时间段 </span>
         </div>
       </div>
     </div>
@@ -120,7 +120,7 @@ function RepeatBit(arr, val, keep = 3) {
 
 
 export default {
-  name: 'Schedule',
+  name: 'ScheduleOnly',
   props:{
     change:{type:Function},
     val:{
@@ -167,11 +167,17 @@ export default {
       day:['周一', '周二', '周三', '周四', '周五', '周六', '周日'],
       I : Array(24).fill(1),
       C : Array(24).fill(0),
-      nowStatueArray:[],
-      downOff:false
+      nowStatueArray:[]
     })
   },
-  mounted(){},
+  mounted(){
+    window.onmouseup = (ev)=>{
+      if(this.downOff){
+        this.mousefn(ev)
+        this.downOff = false
+      }
+    }
+  },
   created(){
     if(this._validatorOriginVal()) this.initSetStatueArray()
   },
@@ -243,8 +249,6 @@ export default {
         })
       }
     },
-
-
     /** 鼠标选择方案 框选 + 点击 */
     down(ev){
       if(!this.disabled){ return}
@@ -347,18 +351,7 @@ export default {
         }
       }
     },
-    up(ev){
-      if(this.downOff){
-        this.mousefn(ev)
-        this.downOff = false
-      }
-    },
-    leave(ev){
-      if(this.downOff){
-        this.mousefn(ev)
-        this.downOff = false
-      }
-    },
+    up(ev){},
     mousefn(){
       if(!this.disabled){ return}
       /** 鼠标点击框下 处理函数*/

@@ -1,32 +1,17 @@
 <template>
 <div>
-  <h1>Schedule - 小时周期控件</h1>
+  <h1>ScheduleOnly - 小时周期控件页面内自能存在一个 </h1>
   <div class="row" v-if="sval">
-    <Schedule
+    <ScheduleOnly
       @change="fn" :tdSize="30" :disabled="disabled" :val="sval" 
-    ></Schedule>
+    ></ScheduleOnly>
   </div>
 
-  <div class="row" v-if="sval">
-    <Schedule
-      @change="fn" :tdSize="30" :disabled="disabled" :val="sval" 
-    ></Schedule>
-  </div>
   <div class="row">
     <span class="btn" @click="disabledfn">disabled: {{disabled}}</span>
   </div>
   <div class="row">{{gval}}</div>
   <pre>
-    历史版本
-      v 20190729
-        API
-          setType 改为 disabled,
-          originVal 改为 val, 
-          onChange 改为 change
-        算法函数修改
-      v 20190718
-        硬核bug修复，tdsize设置最小值，val校验规则修改（错了自行检查不做提示）
-      v 20180727
     功能
       1.支持单位框选、点选
       2.行列快选、反选
@@ -46,10 +31,10 @@
 </template>
 
 <script>
-import Schedule from '~contol/Schedule'
+import ScheduleOnly from '~contol/ScheduleOnly'
 export default {
-  name: 'DemoSchedule',
-  components: {Schedule},
+  name: 'DemoScheduleOnly',
+  components: {ScheduleOnly},
   data(){
     return{
       disabled:true,

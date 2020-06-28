@@ -16,6 +16,11 @@ module.exports = routes = [
     component: () => import('~views/DemoSchedule.vue')
   },
   {
+    path: '/DemoScheduleOnly', //小时周期控件
+    name: 'DemoScheduleOnly',
+    component: () => import('~views/DemoScheduleOnly.vue')
+  },
+  {
     path: '/DemoFolding',
     name: 'DemoSUpload',
     component: () => import('~views/DemoFolding.vue')
