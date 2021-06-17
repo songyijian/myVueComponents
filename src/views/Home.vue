@@ -2,18 +2,18 @@
   <div class="home">
     <h1>vue contol </h1>
     <img :src="'~assets/logo.png'" alt="">
-    <Qfenwei v-model="inputval" @validatefn="onValidate"></Qfenwei>
+    <Quantile v-model="inputval" @validatefn="onValidate"></Quantile>
     {{inputval}}
   </div>
 </template>
 
 <script>
-  import Qfenwei from "~contol/Qfenwei";
+  import Quantile from "~contol/Quantile";
 
   export default {
     name: 'home',
     components: {
-      Qfenwei
+      Quantile
     },
     data() {
       return {
