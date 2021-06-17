@@ -40,7 +40,7 @@ api
             :style="{'height':`${tdSize}px`,'line-height': `${tdSize}px`}">{{item}}</span>
         </div>
         <div ref="time_bloack_box" class="time_bloack_box" @mousedown="down($event)" @mouseup="up($event)"
-          @mousemove="move($event)" @mouseleave="leave($event)">
+          @mousemove="move($event)">
           <div v-for="(itemf,indexf) in nowStatueArray" :key="'f'+indexf" :style="{height: `${tdSize}px`}">
             <span v-for="(item,index) in itemf" :style="{'width':`${tdSize}px`,'height':`${tdSize}px`}"
               :key=" 'c'+index + indexf " :class="{'schedule_time_item_yes':item==1}">{{index}}
@@ -55,13 +55,13 @@ api
       </div>
       <div class="schedule_flter_box" :style="{ 'height': flterHeight+'px','line-height':flterHeight+'px'}">
         <div class="flter_btn_box">
-          快速设定：<span @click="dayTf('all')">全周</span>
-          <span @click="dayTf('restDay')">周一至周五</span>
-          <span @click="dayTf('workingDay')">周六日</span>
+          快速设定：<span @click="dayTf('all')">全周投放</span>
+          <span @click="dayTf('restDay')">周一到周五投放</span>
+          <span @click="dayTf('workingDay')">周末投放</span>
         </div>
         <div class="flter_msg_box">
-          <span><i class="play_b"></i> 有效时间 </span>
-          <span><i class="stop_b"></i> 无效时间 </span>
+          <span><i class="play_b"></i> 投放时间段 </span>
+          <span><i class="stop_b"></i> 暂停时间段 </span>
         </div>
       </div>
     </div>
@@ -80,6 +80,7 @@ api
      *  RepeatBit([1, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 1, 0, 0, 1, 1, 0, 1], 1, 2)
      *      >[{"val":1,"length":3,"start":0,"end":2},{"val":1,"length":4,"start":5,"end":8},{"val":1,"length":2,"start":14,"end":15}]
      */
+
     function RepeatBit(arr, val, keep = 3) {
       if (!Array.isArray(arr)) {
         return Error('参数必须是合法数组')
@@ -113,11 +114,14 @@ api
           }
           start = arr.length + 1
         }
+
       }
       return m
     }
+
+
     export default {
-      name: 'Schedule',
+      name: 'ScheduleOnly',
       props: {
         change: {
           type: Function
@@ -168,11 +172,17 @@ api
           day: ['周一', '周二', '周三', '周四', '周五', '周六', '周日'],
           I: Array(24).fill(1),
           C: Array(24).fill(0),
-          nowStatueArray: [],
-          downOff: false
+          nowStatueArray: []
         })
       },
-      mounted() {},
+      mounted() {
+        window.onmouseup = (ev) => {
+          if (this.downOff) {
+            this.mousefn(ev)
+            this.downOff = false
+          }
+        }
+      },
       created() {
         if (this._validatorOriginVal()) this.initSetStatueArray()
       },
@@ -297,11 +307,13 @@ api
             //移动 【绝对】 距离
             let ylAbs = Math.abs(yl);
             let xlAbs = Math.abs(xl);
+
             // 变量抽离
             let top = (this.downData.y - this.dowBgDval.top) + 'px';
             let left = (this.downData.x - this.dowBgDval.left) + 'px';
             let w = this.tdSize + 'px'
             let h = this.tdSize + 'px'
+
             /** 顺势框选
                 yl > 0  向下移动鼠标
                 xl > 0  向右滑动
@@ -317,6 +329,7 @@ api
                 }
               }
             }
+
             if (xl > 0) {
               if (x > this.downData.x + this.dowBgDval.right) { // 有效移动
                 if (x < this.downData.x + this.dowBgDval.right + this.tdSize) {
@@ -326,6 +339,7 @@ api
                 }
               }
             }
+
             /** 逆势框选   */
             if (yl < 0) {
               if (y < this.downData.y - this.dowBgDval.top) { // 有效移动
@@ -356,18 +370,7 @@ api
             }
           }
         },
-        up(ev) {
-          if (this.downOff) {
-            this.mousefn(ev)
-            this.downOff = false
-          }
-        },
-        leave(ev) {
-          if (this.downOff) {
-            this.mousefn(ev)
-            this.downOff = false
-          }
-        },
+        up(ev) {},
         mousefn() {
           if (!this.disabled) {
             return
