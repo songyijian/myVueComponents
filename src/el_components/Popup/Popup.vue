@@ -1,10 +1,10 @@
 <!--
- * @Description  : 弹窗组件，继承了系统订制ui样式
+ * @Description  : Popup纯粹的弹窗组件，继承了系统订制ui样式
  * @Author       : yijian
  * @Version      : 0.1.0
  * @Date         : 2021-06-28 14:55:43
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2021-06-28 18:22:52
+ * @LastEditTime: 2021-07-01 16:26:57
 -->
 
 <template>
@@ -21,15 +21,16 @@
 <script>
 export default {
   props: {
+    name: "Popup",
     show: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
   },
   data() {
     const visible = this.$props.show;
     return {
-      visible: visible
+      visible: visible,
     };
   },
   watch: {
@@ -38,8 +39,8 @@ export default {
     },
     visible(_new, old) {
       this.$emit("update:show", _new);
-    }
-  }
+    },
+  },
 };
 </script>
 
