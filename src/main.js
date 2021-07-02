@@ -1,42 +1,27 @@
-import Vue from 'vue'
-import App from './App.vue'
-import router from '~router/index.js'
-import store from './store'
-// import axios from '~config/http.config.js'
+import Vue from "vue";
+import App from "./App.vue";
+import router from "@router/index.js";
+import store from "./store";
+// import axios from '@config/http.config.js'
+
 // mock 数据
-// import '~mock/index.js'
+// import '@mock/index.js'
 // 样式
-import '~style/reset.scss'
-import '~style/layout.scss'
+import "@style/reset.scss";
+import "@style/layout.scss";
 
-
-Vue.config.productionTip = false
-Vue.config.devtools = true
-
+Vue.config.productionTip = false;
+Vue.config.devtools = true;
 
 // // http拓展到vue
-// Vue.prototype.$http = axios
-// Vue.prototype.$post = axios.post
-// Vue.prototype.$get = function get(url, param) {
-//   return new Promise((resolve, reject) => {
-//     axios({
-//       method: 'get',
-//       url,
-//       params: param,
-//       // cancelToken: new CancelToken(c => {
-//       //   cancel = c
-//       // })
-//     }).then(res => {
-//       resolve(res)
-//     })
-//   })
-// }
+// Vue.prototype.$axios = axios
 
-
-
+import ElementUI from "element-ui";
+import "element-ui/lib/theme-chalk/index.css";
+Vue.use(ElementUI);
 
 new Vue({
   router,
   store,
-  render: h => h(App)
-}).$mount('#app')
+  render: (h) => h(App),
+}).$mount("#app");

@@ -3,12 +3,12 @@
     <h1>Folding - 折叠面板</h1>
     <div class="row">
       <Folding @change="chengFn" :status="status" :disabled="disabled">
-        <template slot="header"> title - 展开状态：{{status}}</template>
+        <template slot="header"> title - 展开状态：{{ status }}</template>
         <template slot="body" class="bodys"> body txt </template>
       </Folding>
     </div>
     <div class="row">
-      <span class="btn" @click="disabledfn">disabled: {{disabled}}</span>
+      <span class="btn" @click="disabledfn">disabled: {{ disabled }}</span>
     </div>
 
     <div class="row">
@@ -34,7 +34,7 @@
 </template>
 
 <script lang="js">
-import Folding from '~contol/Folding'
+import Folding from '@contol/Folding'
 export default {
   name: 'DemoFolding',
   components: {Folding},
@@ -54,7 +54,7 @@ export default {
     chengFn(n){
       this.status = n
     }
-    
+
   }
 }
 </script>

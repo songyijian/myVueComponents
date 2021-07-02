@@ -2,7 +2,7 @@
 
 # README-components 组件目录
 
-## el_compontents
+## compontents_el
 
 基于 elenmetUI 封装的组件、 工作中常用 
 

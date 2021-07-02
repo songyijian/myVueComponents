@@ -1,17 +1,20 @@
 <template>
-<div>
-  <h1>ScheduleOnly - 小时周期控件页面内自能存在一个 </h1>
-  <div class="row" v-if="sval">
-    <ScheduleOnly
-      @change="fn" :tdSize="30" :disabled="disabled" :val="sval" 
-    ></ScheduleOnly>
-  </div>
+  <div>
+    <h1>ScheduleOnly - 小时周期控件页面内自能存在一个</h1>
+    <div class="row" v-if="sval">
+      <ScheduleOnly
+        @change="fn"
+        :tdSize="30"
+        :disabled="disabled"
+        :val="sval"
+      ></ScheduleOnly>
+    </div>
 
-  <div class="row">
-    <span class="btn" @click="disabledfn">disabled: {{disabled}}</span>
-  </div>
-  <div class="row">{{gval}}</div>
-  <pre>
+    <div class="row">
+      <span class="btn" @click="disabledfn">disabled: {{ disabled }}</span>
+    </div>
+    <div class="row">{{ gval }}</div>
+    <pre>
     功能
       1.支持单位框选、点选
       2.行列快选、反选
@@ -24,41 +27,39 @@
         :tdSize="30"        #每个格子的大小(px) 不<16
         :timeHeight="30"    #0-23小时列快速选择按钮高度(px) 不<16
         :dayWidth="50"      #周1-7行速选择按钮宽度(px) 不<16 [高度是根据tdSize算出来的]
-  </pre>
-</div>
-   
-
+  </pre
+    >
+  </div>
 </template>
 
 <script>
-import ScheduleOnly from '~contol/ScheduleOnly'
+import ScheduleOnly from "@contol/ScheduleOnly";
 export default {
-  name: 'DemoScheduleOnly',
-  components: {ScheduleOnly},
-  data(){
-    return{
-      disabled:true,
+  name: "DemoScheduleOnly",
+  components: { ScheduleOnly },
+  data() {
+    return {
+      disabled: true,
       // sval:Array(24*7).fill(1),
-      sval:null,
-      gval:null,
-    }
+      sval: null,
+      gval: null,
+    };
   },
-  mounted(){
-    this.$get('/mock/Schedule',{a:1}).then(res=>{
+  mounted() {
+    this.$get("/mock/Schedule", { a: 1 }).then((res) => {
       // console.log(res);
-      if(res.code===200){
-        this.sval = res.data
+      if (res.code === 200) {
+        this.sval = res.data;
       }
-    })
+    });
   },
-  methods:{
-    disabledfn(){
-      this.disabled = !this.disabled
+  methods: {
+    disabledfn() {
+      this.disabled = !this.disabled;
     },
-    fn(n){
-      this.gval = n
+    fn(n) {
+      this.gval = n;
     },
-    
-  }
-}
+  },
+};
 </script>
