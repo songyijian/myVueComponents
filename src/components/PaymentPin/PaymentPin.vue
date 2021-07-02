@@ -1,43 +1,34 @@
-<!--
- * @Description: PaymentPin 
- * @Author: yijian
- * @Version: 1.0.0
- * @Date: 2021-06-28 18:08:28
- * @LastEditors: Please set LastEditors
- * @LastEditTime: 2021-06-28 18:23:38
--->
-
 <template>
   <div class="input-wrap">
     <input
-      type="text"
-      v-for="(item, idx) in codeArr"
-      :key="idx"
+      type="txt"
+      onpaste="return false"
+      v-for="item in codeArr"
       v-model="item.value"
-      :ref="`code${[idx]}`"
-      @input="onInput($event, item, idx)"
-      @keyup="onKeyup($event, item, idx)"
+      :index="item.idx"
+      :key="item.idx"
+      :ref="item.idx"
+      @input="onInput($event, item, item.idx)"
+      @keyup="onKeyup($event, item, item.idx)"
       maxlength="1"
     />
   </div>
 </template>
 
 <script>
-// format 对象格式成string
+const idx = 0;
+
 function format(array = []) {
   return array.reduce((a, item) => a + item.value, "");
 }
 
-// 格式为对象
-function deformat(str = "") {
-  return str.length !== 4
-    ? [
-        { value: "", back: false },
-        { value: "", back: false },
-        { value: "", back: false },
-        { value: "", back: false }
-      ]
-    : [...String(str)].map(value => ({ value: value || "", back: false }));
+function deformat(str = "", len) {
+  const strs = [...String(str)];
+  const arr = [];
+  for (let i = 0; i < len; i++) {
+    arr.push({ value: strs[i] || "", back: false, idx: idx + i });
+  }
+  return arr;
 }
 
 export default {
@@ -46,52 +37,61 @@ export default {
   props: {
     value: {
       type: String,
-      default: ""
-    }
+      default: "",
+    },
+    length: {
+      type: Number,
+      default: 4,
+    },
+    type: {
+      type: String,
+      validator(value) {
+        return value === "number" || value === "txt";
+      },
+      default: "number",
+    },
   },
   data() {
-    let pz = deformat(this.$props.value);
+    const config = deformat(this.$props.value, this.$props.length);
     return {
-      codeArr: pz
+      codeArr: config,
     };
   },
   mounted() {},
   methods: {
-    onInput(e, item, idx) {
-      const valLen = this.codeArr.length;
-      const length = e.target.value.length;
-
-      item.value = e.target.value.charAt(length - 1);
-      if (item.value !== "") {
-        this.isError = false;
-        item.back = false;
-        if (idx === valLen - 1) return;
-        this.$refs[`code${+idx + 1}`][0].focus();
-      }
-      this.$emit("input", format(this.codeArr));
+    typeValidate(agr) {
+      const re = this.type === "number" ? /[0-9]/g : /[a-z]/g;
+      return re.test(agr);
     },
-    onKeyup(e, item, idx) {
-      if (idx === 0) return;
-      if (e.keyCode === 8 && e.target.value == "") {
-        if (item.back === false) {
-          item.back = true;
-          console.log("item.back", item.back);
-        } else {
-          this.$refs[`code${idx - 1}`][0].focus();
-          this.codeArr[idx - 1].value = "";
-          this.codeArr[idx - 1].back = true;
-        }
-      }
+    onInput(e, item, id) {
+      // console.log(e.data);
+      const len = this.codeArr.length;
+      const val = String(e.data).replace(/\s/, "").charAt(0);
 
+      item.value = this.typeValidate(val) ? val : "";
       this.$emit("input", format(this.codeArr));
-    }
-  }
+
+      if (item.value !== "") {
+        if (id === len - 1) return;
+        this.$refs[`${id + 1}`][0].focus();
+      }
+    },
+    onKeyup(e, item, id) {
+      if (id === 0) return;
+      if (e.keyCode === 8) {
+        item.value = "";
+        this.$emit("input", format(this.codeArr));
+        this.$refs[`${id - 1}`][0].focus();
+      }
+    },
+  },
 };
 </script>
 
 <style lang="scss" scoped>
 .input-wrap {
   display: inline-block;
+  // margin-top: 16px;
   input {
     background-color: #f8f9fa;
     text-align: center;
@@ -100,6 +100,7 @@ export default {
       border: 1px solid #f15a24;
       color: #f15a24;
     }
+
     width: 40px;
     height: 40px;
     border: 1px solid #dcdfe6;
