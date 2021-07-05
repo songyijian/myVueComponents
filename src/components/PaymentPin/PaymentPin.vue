@@ -4,7 +4,7 @@
  * @Version      : 1.0.0
  * @Date         : 2021-07-02 17:30:12
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2021-07-02 19:27:47
+ * @LastEditTime: 2021-07-05 18:37:50
 -->
 <template>
   <div class="input-wrap">
@@ -41,11 +41,11 @@
       />
     </template>
 
-    <span class="show-pwds" @click="showPwd">
+    <!-- <span class="show-pwds" @click="showPwd">
       <svg-icon
         :icon-class="passwordType === 'password' ? 'eye1' : 'eye-open'"
       />
-    </span>
+    </span> -->
   </div>
 </template>
 
@@ -108,7 +108,9 @@ export default {
     },
     onInput(e, item, id) {
       const len = this.codeArr.length;
-      const val = String(e.data).replace(/\s/, "").charAt(0);
+      const val = String(e.data)
+        .replace(/\s/, "")
+        .charAt(0);
 
       item.value = this.typeValidate(val) ? val : "";
       this.$emit("input", format(this.codeArr));
