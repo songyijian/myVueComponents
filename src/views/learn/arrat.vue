@@ -1,12 +1,11 @@
-<template lang='pug'>
-  div
-    h1 arrat
+<template>
+  <h1>arrat</h1>
 </template>
 
 <script>
-export default {
-  name: 'arrat'
-}
+  export default {
+    name: 'arrat'
+  }
 </script>
 
 <style scoped lang="scss">

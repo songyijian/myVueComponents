@@ -10,6 +10,7 @@
     "test:e2e": "vue-cli-service test:e2e"
   },
   "dependencies": {
+    "axios": "^0.21.1",
     "core-js": "^2.6.5",
     "element-ui": "^2.15.3",
     "qs": "^6.7.0",
@@ -26,11 +27,7 @@
     "eslint": "^5.16.0",
     "eslint-plugin-vue": "^5.0.0",
     "node-sass": "^4.9.0",
-    "pug": "^2.0.4",
-    "pug-html-loader": "^1.1.5",
-    "pug-plain-loader": "^1.0.0",
     "sass-loader": "^7.1.0",
-    "vue-cli-plugin-pug": "^1.0.7",
     "vue-template-compiler": "^2.6.10"
   }
 }

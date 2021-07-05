@@ -1,12 +1,11 @@
-<template lang='pug'>
-  div
-    h1 event
+<template>
+  <h1>event</h1>
 </template>
 
 <script>
-export default {
-  name: 'event'
-}
+  export default {
+    name: 'event'
+  }
 </script>
 
 <style scoped lang="scss">
