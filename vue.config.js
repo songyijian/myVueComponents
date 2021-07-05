@@ -15,15 +15,7 @@ module.exports = {
       .set("@style", resolve("src/style")) //样式文件
       .set("@utils", resolve("src/utils")) //公用func
       .set("@router", resolve("src/router")) //router
-      .set("@config", resolve("src/config")) //config
+      .set("@store", resolve("src/store")) //store
       .set("@mock", resolve("src/mock")); //mock
-
-    // pug模版配置
-    config.module
-      .rule("pug")
-      .test(/\.pug$/)
-      .use("pug-html-loader")
-      .loader("pug-html-loader")
-      .end();
   },
 };

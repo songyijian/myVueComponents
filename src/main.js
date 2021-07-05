@@ -1,8 +1,7 @@
 import Vue from "vue";
 import App from "./App.vue";
 import router from "@router/index.js";
-import store from "./store";
-// import axios from '@config/http.config.js'
+import store from "./store/index";
 
 // mock 数据
 // import '@mock/index.js'
@@ -12,9 +11,6 @@ import "@style/layout.scss";
 
 Vue.config.productionTip = false;
 Vue.config.devtools = true;
-
-// // http拓展到vue
-// Vue.prototype.$axios = axios
 
 import ElementUI from "element-ui";
 import "element-ui/lib/theme-chalk/index.css";

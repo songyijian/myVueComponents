@@ -178,44 +178,6 @@ export default {
       this.getTableData();
     },
 
-    // noValue(value) {
-    //   this.queryData = { ...this.queryData, ...value };
-    // },
-    // startDate(value) {
-    //   this.queryData.startDate = value;
-    //   this.getTableData();
-    // },
-    // endDate(value) {
-    //   this.queryData.endDate = value;
-    //   this.getTableData();
-    // },
-    // startValue(value) {
-    //   this.queryData.amountStart = value || "";
-    // },
-    // endValue(value) {
-    //   this.queryData.amountEnd = value || "";
-    // },
-    // searchValue(value) {
-    //   this.queryData.orderNo = value;
-    // },
-    // merchantSearchValue(value) {
-    //   this.queryData.subMerchantId = value;
-    // },
-    // userSearchValue(value) {
-    //   this.queryData.userId = value;
-    // },
-    // selectServer(value) {
-    //   this.queryData["serviceTypes"] = value;
-    //   this.getTableData();
-    // },
-    // selectValue(value) {
-    //   this.queryData.orderStatus = value;
-    //   this.getTableData();
-    // },
-    // receiptAccountHandler(value) {
-    //   this.queryData.recipient = value;
-    // },
-
     // 获取列表数据
     getTableData() {
       getList(
@@ -326,30 +288,6 @@ export default {
       margin: 0;
       margin-right: 16px;
       margin-bottom: 16px;
-    }
-    // border: 1px solid red;
-  }
-
-  /deep/.filter-bar {
-    .amount,
-    .search {
-      input {
-        border-radius: 0;
-        border: none;
-        outline: none;
-        box-sizing: border-box;
-        appearance: none;
-        -moz-appearance: none;
-        -webkit-appearance: none;
-        -ms-appearance: none;
-        border-radius: 5px;
-
-        // border: 1px solid red;
-      }
-
-      input:focus {
-        border: 1px solid #0dc693;
-      }
     }
   }
 }
