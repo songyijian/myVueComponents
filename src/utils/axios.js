@@ -1,35 +1,43 @@
-import qs from "qs"
+import qs from "qs";
+import axios from "axios";
 
 // axios 配置
-axios.defaults.timeout = 30000
-axios.defaults.retry = 4
-axios.defaults.retryDelay = 1000
+// axios.defaults.timeout = 30000
+// axios.defaults.retry = 4
+// axios.defaults.retryDelay = 1000
 
-// 代理需要切换成api
-// axios.defaults.baseURL = process.env.NODE_ENV === 'development' ? '/api' : ''
-
-// 上行拦截
-axios.interceptors.request.use(config => {
-  // console.log('上行拦截',config)
-  if (config.method === 'post' && config.headers['Content-Type'] !== "multipart/form-data") {
-    config.data = qs.stringify(config.data)
-  }
-  return config
-},
-  error => {//这里是返回最外层状态码不为200的错误
-    return Promise.reject(error)
-  }
-)
-
-// 下行拦截
-axios.interceptors.response.use(
-  res => {
-    // console.log(res);
-    return res.data
+const instance = axios.create({
+  // baseURL: '',
+  retry: 5,
+  retryDelay: 1000,
+  timeout: 30000,
+  headers: {
+    "X-Custom-Header": "foobar",
   },
-  error => { //这里是返回最外层状态码不为200的错误
-    return Promise.reject(error)
-  }
-)
+});
 
-export default axios
+instance.interceptors.request.use(
+  (req) => {
+    if (
+      req.method === "post" &&
+      req.headers["Content-Type"] !== "multipart/form-data"
+    ) {
+      req.data = qs.stringify(req.data);
+    }
+    return req;
+  },
+  (error) => {
+    return Promise.reject(error);
+  }
+);
+
+instance.interceptors.response.use(
+  (res) => {
+    return res.data;
+  },
+  (error) => {
+    return Promise.reject(error);
+  }
+);
+
+export default instance;

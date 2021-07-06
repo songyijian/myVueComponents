@@ -1,9 +1,15 @@
 import Vue from "vue";
 import Router from "vue-router";
-import routes from "./router.config.js";
+
+import base from "./router.config";
+import componentsBasedEl from "./components.basedEl.config";
+import components from "./components.config";
+
+console.log(base);
 
 Vue.use(Router);
 
 export default new Router({
-  routes,
+	// routes
+	routes: [base, componentsBasedEl, components]
 });
