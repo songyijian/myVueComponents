@@ -3,7 +3,7 @@ const componentsBasedElment = {
 	path: "/componentsBasedElment",
 	name: "componentsBasedElment",
 	redirect: "/componentsBasedElment/event",
-	component: () => import("@views/Layout/componentLayout.vue"),
+	component: () => import("@views/Layout/demoLayout.vue"),
 	children: [
 		// {
 		//   path: "/componentsBasedElment/event",

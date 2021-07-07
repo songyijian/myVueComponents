@@ -13,8 +13,11 @@ import ElementUI from "element-ui";
 import "element-ui/lib/theme-chalk/index.css";
 Vue.use(ElementUI);
 
-import PaymentPin from "@/components/PaymentPin";
-Vue.use(PaymentPin);
+import mycomponents from "@/components/index";
+Vue.use(mycomponents);
+
+// import PaymentPin from "@/components/PaymentPin";
+// Vue.use(PaymentPin);
 // console.log(PaymentPin);
 
 Vue.config.productionTip = false;

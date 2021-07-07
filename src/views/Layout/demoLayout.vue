@@ -12,7 +12,7 @@
 <script>
 import routes from "@router/components.config.js";
 export default {
-	name: "componentLayout",
+	name: "demoLayout",
 	data() {
 		return {
 			componentsConfig: routes.children
@@ -26,6 +26,7 @@ export default {
 .layout-components {
 	display: flex;
 	flex-flow: row;
+	padding: 2rem 0;
 
 	.menu-list {
 		// background: #ccc;
@@ -36,21 +37,4 @@ export default {
 		}
 	}
 }
-// .learn {
-// 	display: flex;
-// 	flex-direction: row;
-// 	.list {
-// 		width: 15rem;
-// 		a {
-// 			display: block;
-// 			line-height: 2rem;
-// 			background-color: #ccc;
-// 			margin: 2px 0;
-// 		}
-// 	}
-// 	.content {
-// 		flex: auto;
-// 		padding: 1rem 0 1rem 1rem;
-// 	}
-// }
 </style>
