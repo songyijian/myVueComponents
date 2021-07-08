@@ -5,7 +5,7 @@
 				{{ item.name }}
 			</router-link>
 		</div>
-		<router-view />
+		<router-view class="content" />
 	</div>
 </template>
 
@@ -26,15 +26,25 @@ export default {
 .layout-components {
 	display: flex;
 	flex-flow: row;
-	padding: 2rem 0;
-
+	box-sizing: border-box;
 	.menu-list {
-		// background: #ccc;
 		border-right: 1px solid #ccc;
 		width: 240px;
+		flex: 0 0 240px;
+		min-height: 100vh;
 		a {
 			display: block;
+			// background: #ccc;
+			padding: 0 1rem;
+			margin-bottom: 1rem;
+			color: #000;
 		}
+		.router-link-active {
+			color: blue;
+		}
+	}
+	.content {
+		padding: 0 2rem;
 	}
 }
 </style>
