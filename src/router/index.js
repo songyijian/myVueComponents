@@ -8,6 +8,5 @@ import components from "./components.config";
 Vue.use(Router);
 
 export default new Router({
-	// routes
-	routes: [base, componentsBasedEl, components]
+  routes: [base, componentsBasedEl, components]
 });
