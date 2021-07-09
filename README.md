@@ -1,4 +1,4 @@
-# vue 控件（vuecontol）
+# vue 控件（myVueComponents）
 
 ## 环境
 
