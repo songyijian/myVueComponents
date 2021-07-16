@@ -16,17 +16,22 @@ let components = {
 		{
 			path: "/components/install",
 			name: "安装",
-			component: () => import("@views/demoPage/install.vue") //loadDeom("install")
+			component: () => import("@views/demoPage/install.vue") 
 		},
 		{
 			path: "/components/paymentPin",
 			name: "paymentPin 支付验证",
-			component: () => import("@views/demoPage/paymentPin.vue") //loadDeom("install")
+			component: () => import("@views/demoPage/paymentPin.vue") 
 		},
 		{
 			path: "/components/weekMolecule",
 			name: "WeekMolecule 周小时粒度管理控件",
-			component: () => import("@views/demoPage/weekMolecule.vue") //loadDeom("install")
+			component: () => import("@views/demoPage/weekMolecule.vue") 
+		},
+		{
+			path: "/components/decayLodingBar",
+			name: "DecayLodingBar 周小时粒度管理控件",
+			component: () => import("@views/demoPage/decayLodingBar.vue") 
 		}
 	]
 };
