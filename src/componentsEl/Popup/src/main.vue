@@ -3,8 +3,8 @@
  * @Author       : yijian
  * @Version      : 0.1.0
  * @Date         : 2021-06-28 14:55:43
- * @LastEditors: Please set LastEditors
- * @LastEditTime: 2021-07-01 16:26:57
+ * @LastEditors: yijian.song
+ * @LastEditTime: 2021-07-31 00:35:30
 -->
 
 <template>
@@ -21,7 +21,7 @@
 <script>
 export default {
   props: {
-    name: "Popup",
+    name: Popup,
     show: {
       type: Boolean,
       default: false,

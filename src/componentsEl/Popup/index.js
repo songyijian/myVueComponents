@@ -1,18 +1,18 @@
 /*
- * @Description  : Popup全局注册入口
- * @Author       : yijian
- * @Version      : 3.0.0
- * @Date         : 2021-06-28 15:04:32
- * @LastEditors  : Please set LastEditors
- * @LastEditTime : 2021-06-28 15:19:23
+ * @Description: 全局注册入口
+ * @Author: yijian
+ * @Version: 0.1.0
+ * @Date: 2021-07-07 15:55:32
+ * @LastEditors: yijian.song
+ * @LastEditTime: 2021-07-31 00:35:18
  */
 
-import PopupVUE from "./Popup.vue";
+import component from "./src/main.vue";
 
-const Popup = {
-  install: function(Vue) {
-    Vue.component("Popup", PopupVUE);
-  }
+const inlet = {
+  install: function (Vue) {
+    Vue.component(component.name, component);
+  },
 };
 
-export default Popup;
+export default inlet;

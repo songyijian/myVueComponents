@@ -4,17 +4,15 @@
  * @Version: 0.1.0
  * @Date: 2021-07-07 16:03:43
  * @LastEditors: yijian.song
- * @LastEditTime: 2021-07-31 00:37:57
+ * @LastEditTime: 2021-07-31 00:36:55
  */
 
-import PaymentPin from "./PaymentPin/index";
-import WeekMolecule from "./WeekMolecule/index";
-import DecayLodingBar from "./DecayLodingBar/index";
+import ElinputGroup from "./ElinputGroup/index";
+import Popup from "./Popup/index";
 
 const componentsList = {
-  PaymentPin,
-  WeekMolecule,
-  DecayLodingBar,
+  ElinputGroup,
+  Popup,
 };
 
 function install (Vue, config) {

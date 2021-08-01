@@ -1,18 +1,18 @@
 /*
- * @Description  : ElinputGroup 多个el-input合并成一个input样式（el不支持多个select）
- * @Author       : yijian
- * @Version      : 1.0.0
- * @Date         : 2021-07-01 16:03:09
- * @LastEditors  : Please set LastEditors
- * @LastEditTime : 2021-07-01 16:21:40
+ * @Description: 全局注册入口
+ * @Author: yijian
+ * @Version: 0.1.0
+ * @Date: 2021-07-07 15:55:32
+ * @LastEditors: yijian.song
+ * @LastEditTime: 2021-07-31 00:35:48
  */
 
-import ElinputGroupVUE from "./ElinputGroup.vue";
+import component from "./src/main.vue";
 
-const ElinputGroup = {
-  install: function(Vue) {
-    Vue.component("ElinputGroup", ElinputGroupVUE);
-  }
+const inlet = {
+  install: function (Vue) {
+    Vue.component(component.name, component);
+  },
 };
 
-export default ElinputGroup;
+export default inlet;
