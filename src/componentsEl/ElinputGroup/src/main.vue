@@ -3,8 +3,8 @@
  * @Author       : yijian
  * @Version      : 1.0.0
  * @Date         : 2021-07-01 16:03:30
- * @LastEditors  : Please set LastEditors
- * @LastEditTime : 2021-07-01 16:18:28
+ * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2021-07-30 11:43:09
 -->
 
 <template>
@@ -15,7 +15,7 @@
 
 <script>
 export default {
-  name: "ElinputGroup"
+  name: 'ElinputGroup'
 };
 </script>
 

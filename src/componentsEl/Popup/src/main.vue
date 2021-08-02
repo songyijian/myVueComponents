@@ -4,16 +4,11 @@
  * @Version      : 0.1.0
  * @Date         : 2021-06-28 14:55:43
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2021-07-01 16:26:57
+ * @LastEditTime: 2021-07-30 11:43:39
 -->
 
 <template>
-  <el-dialog
-    :visible.sync="visible"
-    custom-class="add-money-dialog"
-    :show-close="false"
-    :close-on-click-modal="false"
-  >
+  <el-dialog :visible.sync="visible" custom-class="add-money-dialog" :show-close="false" :close-on-click-modal="false">
     <slot></slot>
   </el-dialog>
 </template>
@@ -21,16 +16,16 @@
 <script>
 export default {
   props: {
-    name: "Popup",
+    name: 'Popup',
     show: {
       type: Boolean,
-      default: false,
-    },
+      default: false
+    }
   },
   data() {
     const visible = this.$props.show;
     return {
-      visible: visible,
+      visible: visible
     };
   },
   watch: {
@@ -38,9 +33,9 @@ export default {
       this.visible = _new;
     },
     visible(_new, old) {
-      this.$emit("update:show", _new);
-    },
-  },
+      this.$emit('update:show', _new);
+    }
+  }
 };
 </script>
 
