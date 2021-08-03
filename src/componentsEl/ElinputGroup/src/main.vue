@@ -3,8 +3,13 @@
  * @Author       : yijian
  * @Version      : 1.0.0
  * @Date         : 2021-07-01 16:03:30
+<<<<<<< HEAD:src/componentsEl/ElinputGroup/src/main.vue
  * @LastEditors: Please set LastEditors
  * @LastEditTime: 2021-07-30 11:43:09
+=======
+ * @LastEditors: yijian.song
+ * @LastEditTime: 2021-07-31 00:36:02
+>>>>>>> f97baecc98b417f4089c3bc541cf79ac1101da79:src/componentsEl/ElinputGroup/ElinputGroup.vue
 -->
 
 <template>
@@ -15,7 +20,11 @@
 
 <script>
 export default {
+<<<<<<< HEAD:src/componentsEl/ElinputGroup/src/main.vue
   name: 'ElinputGroup'
+=======
+  name: "ElinputGroup",
+>>>>>>> f97baecc98b417f4089c3bc541cf79ac1101da79:src/componentsEl/ElinputGroup/ElinputGroup.vue
 };
 </script>
 
@@ -23,7 +32,6 @@ export default {
 .elinput-group {
   display: inline-table;
   border-collapse: collapse;
-  // height: 38px;
   border-style: hidden;
   box-shadow: 0 0 0 1px #dcdfe6 inset;
   border-radius: 5px !important;
@@ -32,6 +40,7 @@ export default {
     border-width: 0px;
     background: none;
   }
+
   & > * {
     display: table-cell !important;
     border: 1px solid #dcdfe6;
