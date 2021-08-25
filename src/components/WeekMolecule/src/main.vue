@@ -3,19 +3,14 @@
  * @Author: yijian
  * @Version: 0.1.0
  * @Date: 2021-07-07 15:51:39
- * @LastEditors: yijian.song
- * @LastEditTime: 2021-07-31 00:43:00
+ * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2021-08-25 16:04:04
 -->
 <template lang="html">
   <div class="week-molecule" :class="{ disabledstyle: disabled }">
     <div class="body">
       <div class="column">
-        <span
-          v-for="(item, index) in time"
-          :key="item"
-          @click="columnSelect(index)"
-          :style="{ width: `${size}px` }"
-        >
+        <span v-for="(item, index) in time" :key="item" @click="columnSelect(index)" :style="{ width: `${size}px` }">
           {{ item }}
         </span>
       </div>
@@ -32,19 +27,8 @@
           {{ item }}
         </span>
       </div>
-      <div
-        ref="molecule"
-        class="molecule"
-        @mousedown="down($event)"
-        @mouseup="up($event)"
-        @mousemove="move($event)"
-        @mouseleave="leave($event)"
-      >
-        <div
-          v-for="(itemf, indexf) in fitStatue"
-          :key="'f' + indexf"
-          :style="{ height: `${size}px` }"
-        >
+      <div ref="molecule" class="molecule" @mousedown="down($event)" @mouseup="up($event)" @mousemove="move($event)" @mouseleave="leave($event)">
+        <div v-for="(itemf, indexf) in fitStatue" :key="'f' + indexf" :style="{ height: `${size}px` }">
           <span
             v-for="(item, index) in itemf"
             :style="{
@@ -92,7 +76,7 @@
     </div>
     <input type="hidden" :value="value" />
 
-    <el-calendar v-model="tnow"> </el-calendar>
+    <el-calendar v-model="tnow"></el-calendar>
   </div>
 </template>
 

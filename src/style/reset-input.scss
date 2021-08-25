@@ -1,0 +1,19 @@
+button,
+input,
+select,
+textarea {
+  font-size: 100%;
+}
+select,
+input,
+textarea,
+area {
+  border-radius: 0;
+  border: none;
+  outline: none;
+  box-sizing: border-box;
+  appearance: none;
+  -moz-appearance: none;
+  -webkit-appearance: none;
+  -ms-appearance: none;
+}
