@@ -3,13 +3,8 @@
  * @Author       : yijian
  * @Version      : 0.1.0
  * @Date         : 2021-06-28 14:55:43
-<<<<<<< HEAD:src/componentsEl/Popup/src/main.vue
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2021-07-30 11:43:39
-=======
- * @LastEditors: yijian.song
- * @LastEditTime: 2021-07-31 00:35:30
->>>>>>> f97baecc98b417f4089c3bc541cf79ac1101da79:src/componentsEl/Popup/Popup.vue
+ * @LastEditTime: 2021-08-25 15:20:04
 -->
 
 <template>
@@ -21,11 +16,7 @@
 <script>
 export default {
   props: {
-<<<<<<< HEAD:src/componentsEl/Popup/src/main.vue
-    name: 'Popup',
-=======
     name: Popup,
->>>>>>> f97baecc98b417f4089c3bc541cf79ac1101da79:src/componentsEl/Popup/Popup.vue
     show: {
       type: Boolean,
       default: false
@@ -41,7 +32,7 @@ export default {
     show(_new) {
       this.visible = _new;
     },
-    visible(_new, old) {
+    visible(_new) {
       this.$emit('update:show', _new);
     }
   }
