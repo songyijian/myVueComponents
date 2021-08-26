@@ -1,14 +1,14 @@
 <!--
- * @Description  : CarryNumber
+ * @Description  : CarryInput
  * @Author       : yijian
  * @Version      : 1.0.0
  * @Date         : 2021-07-02 17:30:12
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2021-08-25 19:14:17
+ * @LastEditTime: 2021-08-26 19:17:03
 -->
 <template>
-  <div class="myinput">
-    <div class="slot">
+  <div class="carry-input">
+    <div class="carry-input-slot">
       <slot>₦</slot>
     </div>
     <input type="text" v-model="a" @input="onInput" :disabled="disabled" />
@@ -18,23 +18,29 @@
 <script>
 import { enQuantile, deQuantile } from '@/utils/tools.js'
 export default {
-  name: 'CarryNumber',
+  name: 'CarryInput',
   props: {
     value: {
-      type: String,
-      default: ''
+      required: true
     },
-    disabled: {}
+    disabled: {
+      typeof: Boolean,
+      default: false
+    },
+    precision: Number
   },
   data() {
-    // this.$slots
     return {
-      a: ''
+      a: this.value
     }
   },
   watch: {
-    a(t) {
-      this.a = enQuantile(t)
+    a: {
+      immediate: true,
+      handler(t) {
+        this.a = enQuantile(t, this.precision)
+        this.$emit('input', deQuantile(this.a))
+      }
     }
   },
   mounted() {},
@@ -46,18 +52,18 @@ export default {
 
 <style lang="scss" scoped>
 @import '@/style/reset-input.scss';
-.myinput {
+.carry-input {
   position: relative;
   & > input {
+    box-sizing: border-box;
     height: 52px;
     background: #f8f8fb;
     border-radius: 12px;
     padding: 15px 16px;
     padding-left: 15px + 26px;
     width: 100%;
-    // @extend .strong-num;
   }
-  & > .slot {
+  & > .carry-input-slot {
     position: absolute;
     z-index: 9;
     top: 14px;

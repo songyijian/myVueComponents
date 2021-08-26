@@ -1,7 +1,7 @@
 const base = {
-	path: "/",
-	name: "home",
-	component: () => import("@views/Home.vue")
-};
+  path: '/',
+  name: 'home',
+  component: () => import('@/views/Home.vue')
+}
 
-export default base;
+export default base

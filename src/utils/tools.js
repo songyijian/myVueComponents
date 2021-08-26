@@ -6,7 +6,7 @@
  * @Version: 0.1.0
  * @Date: 2021-07-12 15:40:39
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2021-08-25 18:09:09
+ * @LastEditTime: 2021-08-26 15:15:39
  */
 
 // export function tIntervarl(fn, t = 0, ...args) {
@@ -41,14 +41,14 @@ function quantile(n, unit) {
   }
   return n + t
 }
-export const enQuantile = function (num = '', unit = 3) {
+export const enQuantile = function (num = '', precision, unit = 3) {
   let t = String(num).replace(/[^0-9|^\.]/gi, '')
   let anchor = t.lastIndexOf('.')
   if (anchor < 0) return quantile(t, unit)
   t = t.replace(/\./gi, '')
   let head = t.slice(0, anchor)
   let after = t.slice(anchor)
-  return quantile(head, unit) + '.' + after
+  return quantile(head, unit) + '.' + (after.length > precision ? after.slice(0, precision) : after)
 }
 
 /**
@@ -60,6 +60,6 @@ export const enQuantile = function (num = '', unit = 3) {
  */
 export const deQuantile = (str = '', type = Number) => {
   if (str === '') return
-  let a = String(str).split(',').join('')
+  let a = String(str).replace(/\,/gi, '')
   return type(a)
 }

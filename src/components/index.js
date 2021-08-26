@@ -7,26 +7,26 @@
  * @LastEditTime: 2021-08-25 15:50:21
  */
 
-import PaymentPin from "./PaymentPin/index";
-import WeekMolecule from "./WeekMolecule/index";
-import DecayLodingBar from "./DecayLodingBar/index";
-import CarryNumber from "./CarryNumber/index";
+import PaymentPin from './PaymentPin/index'
+import WeekMolecule from './WeekMolecule/index'
+import DecayLodingBar from './DecayLodingBar/index'
+import CarryInput from './CarryInput/index'
 
 const componentsList = {
   PaymentPin,
   WeekMolecule,
   DecayLodingBar,
-  CarryNumber
-};
+  CarryInput
+}
 
-function install (Vue, config) {
-  Object.values(componentsList).forEach((item) => {
-    item.install(Vue);
-  });
+function install(Vue, config) {
+  Object.values(componentsList).forEach(item => {
+    item.install(Vue)
+  })
 }
 
 export default {
-  version: "0.1.0",
+  version: '0.1.0',
   install,
-  ...componentsList,
-};
+  ...componentsList
+}
