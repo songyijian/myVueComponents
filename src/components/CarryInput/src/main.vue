@@ -4,14 +4,14 @@
  * @Version      : 1.0.0
  * @Date         : 2021-07-02 17:30:12
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2021-08-26 19:17:03
+ * @LastEditTime: 2021-08-27 19:18:11
 -->
 <template>
   <div class="carry-input">
     <div class="carry-input-slot">
       <slot>₦</slot>
     </div>
-    <input type="text" v-model="a" @input="onInput" :disabled="disabled" />
+    <input type="text" v-model="a" :disabled="disabled" @change="change" />
   </div>
 </template>
 
@@ -31,10 +31,16 @@ export default {
   },
   data() {
     return {
-      a: this.value
+      a: '' //this.value
     }
   },
   watch: {
+    value: {
+      immediate: true,
+      handler(t) {
+        this.a = t
+      }
+    },
     a: {
       immediate: true,
       handler(t) {
@@ -43,18 +49,27 @@ export default {
       }
     }
   },
-  mounted() {},
   methods: {
-    onInput(ev) {}
+    change(ev) {
+      this.$emit('change', deQuantile(this.a))
+    }
   }
 }
 </script>
 
 <style lang="scss" scoped>
-@import '@/style/reset-input.scss';
 .carry-input {
   position: relative;
   & > input {
+    border-radius: 0;
+    border: none;
+    outline: none;
+    box-sizing: border-box;
+    appearance: none;
+    -moz-appearance: none;
+    -webkit-appearance: none;
+    -ms-appearance: none;
+
     box-sizing: border-box;
     height: 52px;
     background: #f8f8fb;

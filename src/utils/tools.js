@@ -6,7 +6,7 @@
  * @Version: 0.1.0
  * @Date: 2021-07-12 15:40:39
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2021-08-26 15:15:39
+ * @LastEditTime: 2021-08-27 19:17:37
  */
 
 // export function tIntervarl(fn, t = 0, ...args) {
@@ -27,13 +27,14 @@
 // }
 
 /**
- * @description: 分位格式化
- * @param {number} num
- * @param {number} unit 进制
+ * @Description: 格式化
+ * @param {string} n 整数字符串
+ * @param {*} unit 进制
  * @return {string}
- * enQuantile(3233445454.243567) >"3,233,445,454.243567"
+ * quantile('1234')
+ *    > 1,234
  */
-function quantile(n, unit) {
+function quantile(n, unit = 3) {
   let t = ''
   while (n.length > unit) {
     t = ',' + n.slice(-unit) + t
@@ -41,6 +42,15 @@ function quantile(n, unit) {
   }
   return n + t
 }
+/**
+ * @description: 清洗字符串得到分位格式化
+ * @param {number} num
+ * @param {number} precision 小数精度
+ * @param {number} unit 进制
+ * @return {string}
+ * enQuantile("3abc454.2427",2)
+ *  > 3,454.24
+ */
 export const enQuantile = function (num = '', precision, unit = 3) {
   let t = String(num).replace(/[^0-9|^\.]/gi, '')
   let anchor = t.lastIndexOf('.')
@@ -48,6 +58,7 @@ export const enQuantile = function (num = '', precision, unit = 3) {
   t = t.replace(/\./gi, '')
   let head = t.slice(0, anchor)
   let after = t.slice(anchor)
+  if (precision === 0) return quantile(head, unit)
   return quantile(head, unit) + '.' + (after.length > precision ? after.slice(0, precision) : after)
 }
 
