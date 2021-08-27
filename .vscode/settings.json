@@ -1,0 +1,57 @@
+{
+  "files.autoSave": "onWindowChange",
+  // "vim.disableAnnoyingNeovimMessage": true,
+  // "atomKeymap.promptV3Features": true,
+  "editor.multiCursorModifier": "ctrlCmd",
+  "editor.formatOnPaste": true,
+  // "editor.fontSize": 16,
+  // "workbench.colorTheme": "Monokai",
+  "explorer.confirmDelete": false,
+  "merge-conflict.autoNavigateNextConflict.enabled": true,
+  "eslint.alwaysShowStatus": true,
+  "git.allowForcePush": true,
+  "gitHistory.hideCommitViewExplorer": true,
+  "html.format.indentHandlebars": true,
+  "html.format.indentInnerHtml": true,
+  "editor.formatOnSave": true,
+  "eslint.autoFixOnSave": true,
+  "editor.formatOnType": false,
+  // "workbench.tree.indent": 16,
+  // "view-in-browser.customBrowser": "chrome",
+  "editor.tabSize": 2,
+  "javascript.updateImportsOnFileMove.enabled": "always",
+  "eslint.options": {
+    "extensions": [".js", ".vue", ".scss", "css"]
+  },
+  "eslint.validate": [
+    "javascript",
+    "javascriptreact",
+    "html",
+    {
+      "language": "vue",
+      "autoFix": true
+    }
+  ],
+  "breadcrumbs.enabled": true,
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": true
+  },
+  "editor.minimap.enabled": false,
+
+  // 头部注释
+  "fileheader.customMade": {
+    "Description": "",
+    "Author": "yijian",
+    "Version": "2021.7.30",
+    "Date": "",
+    "LastEditors": "",
+    "LastEditTime": ""
+  },
+  // 函数注释
+  "fileheader.cursorMode": {
+    "Description": "",
+    "param": "",
+    "return": "{type}",
+    "Author": "yijian"
+  }
+}
